@@ -1,8 +1,10 @@
 name: Actualizar precios
 
+# El portal de datos del Gobierno bloquea las conexiones desde fuera de Argentina,
+# y los servidores de GitHub están en EE.UU. Por eso la actualización diaria corre
+# en una PC en Argentina con actualizar.bat. Este workflow queda solo para correrlo
+# a mano, por si algún día el portal abre el acceso.
 on:
-  schedule:
-    - cron: "0 12 * * *"   # todos los días a las 9:00 de Argentina
   workflow_dispatch:
 
 permissions:

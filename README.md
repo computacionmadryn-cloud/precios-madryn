@@ -29,8 +29,19 @@ python -m http.server 8000         # y abrir http://localhost:8000
 Si abrís `index.html` directo (sin servidor) o todavía no existe `data/precios.json`,
 la página muestra **datos de ejemplo inventados** con un aviso amarillo.
 
-## Publicarlo gratis con actualización diaria
+## Publicación
 
-1. Subir esta carpeta a un repositorio de GitHub.
-2. Activar GitHub Pages (Settings → Pages → rama `main`, carpeta raíz).
-3. El workflow `.github/workflows/actualizar.yml` corre todos los días, baja precios nuevos y los publica.
+La página está en GitHub Pages: https://computacionmadryn-cloud.github.io/precios-madryn/
+
+### Actualización diaria (en una PC en Argentina)
+
+El portal de datos del Gobierno **bloquea las conexiones desde fuera de Argentina**, así que los
+servidores de GitHub no pueden bajar los precios. La actualización corre en una PC de Windows en Argentina:
+
+1. Instalar [Python](https://www.python.org/downloads/) (marcar "Add python.exe to PATH") y
+   [Git para Windows](https://git-scm.com/download/win).
+2. Abrir "Símbolo del sistema" y clonar el repo:
+   `git clone https://github.com/computacionmadryn-cloud/precios-madryn C:\precios-madryn`
+3. Correr una vez `C:\precios-madryn\actualizar.bat` (la primera vez Git pide iniciar sesión en GitHub).
+4. Programarlo todos los días a las 9:
+   `schtasks /create /tn "Precios Madryn" /tr "C:\precios-madryn\actualizar.bat" /sc daily /st 09:00`
