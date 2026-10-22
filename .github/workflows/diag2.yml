@@ -1,0 +1,21 @@
+name: Diag imagenes
+on: workflow_dispatch
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130.0"
+          for u in "https://world.openfoodfacts.org/api/v2/product/7790387000046.json?fields=code,image_front_small_url,image_front_url" \
+                   "https://www.carrefour.com.ar/api/catalog_system/pub/products/search?fq=alternateIds_Ean:7790580660009" \
+                   "https://www.vea.com.ar/api/catalog_system/pub/products/search?fq=alternateIds_Ean:7790580660009" \
+                   "https://www.masonline.com.ar/api/catalog_system/pub/products/search?fq=alternateIds_Ean:7790580660009"; do
+            echo "== $u"; curl -sS -m 30 -A "$UA" -o /tmp/r -w "HTTP %{http_code}\n" "$u"; python3 -c "
+          import json,sys
+          t=open('/tmp/r').read()
+          try:
+            d=json.loads(t)
+            if isinstance(d,list): print(len(d), d and [i['imageUrl'] for i in d[0]['items'][0]['images']][:2])
+            else: print(json.dumps(d)[:400])
+          except Exception as e: print('noJSON', t[:300])"
+          done
