@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Precios Madryn</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Compará los precios de La Anónima, Vea, Carrefour y ChangoMás en Puerto Madryn y comprá donde sale más barato.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Precios Madryn">
+<meta property="og:title" content="Precios Madryn · Buscador de precios">
+<meta property="og:description" content="Compará los precios de La Anónima, Vea, Carrefour y ChangoMás en Puerto Madryn y comprá donde sale más barato.">
+<meta property="og:url" content="https://computacionmadryn-cloud.github.io/precios-madryn/">
+<meta property="og:image" content="https://computacionmadryn-cloud.github.io/precios-madryn/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="logo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap">
 <style>
@@ -96,6 +108,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .otros li { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; }
 .otros li span:first-child { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .otros li.mejor, .otros li.mejor span:first-child { color: var(--verde); font-weight: 700; }
+.otros li.elegido span:first-child { color: var(--ink); text-decoration: underline; }
 .otros .promo { color: var(--naranja); font-size: 11px; margin-left: 4px; }
 .mas { grid-column: 1 / -1; justify-self: center; margin: 16px; font: 600 14px var(--f-body); background: var(--azul); color: #fff; border: 0; border-radius: 6px; padding: 12px 24px; cursor: pointer; }
 .mas:hover { background: var(--azul-hover); }
@@ -109,6 +122,115 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 footer { margin-top: 32px; color: var(--muted); font-size: 12px; max-width: 80ch; }
 footer a { color: var(--azul); }
+/* Acciones de la franja */
+.nav-acc { display: flex; align-items: center; gap: 4px; }
+.btn-nav { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; font: inherit; font-size: 14px; color: #333; cursor: pointer; padding: 8px 10px; border-radius: 6px; text-decoration: none; white-space: nowrap; }
+.btn-nav:hover { background: rgba(0,0,0,.06); }
+.btn-nav svg { flex: none; }
+.badge { background: var(--azul); color: #fff; border-radius: 10px; font-size: 12px; font-weight: 700; min-width: 20px; padding: 0 6px; text-align: center; line-height: 20px; }
+.badge:empty { display: none; }
+
+/* Fecha de actualización */
+.actualizado { display: inline-flex; align-items: center; gap: 8px; background: var(--verde-soft); color: #00663a; font-weight: 600; font-size: 14px; border-radius: 999px; padding: 5px 12px; margin-top: 8px; }
+.actualizado::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--verde); flex: none; }
+.actualizado.viejo { background: #fff4e5; color: #8a4b00; }
+.actualizado.viejo::before { background: var(--naranja); }
+.actualizado:empty { display: none; }
+
+/* Filtros */
+.filtros { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 0 0 12px; font-size: 14px; color: var(--muted); }
+.filtros label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.filtros select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-weight: 600; cursor: pointer; max-width: 100%; }
+.filtros input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--azul); }
+
+.sel-suc { position: relative; }
+.sel-suc summary { cursor: pointer; list-style: none; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; color: var(--muted); }
+.sel-suc summary::-webkit-details-marker { display: none; }
+.sel-suc summary b { color: var(--ink); }
+.sel-suc summary::after { content: " ▾"; color: var(--ink); }
+.sel-suc-panel { position: absolute; z-index: 6; top: calc(100% + 4px); left: 0; width: min(320px, calc(100vw - 32px)); background: var(--surface); border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,.2); padding: 10px 12px; display: grid; gap: 8px; color: var(--ink); }
+.sel-suc-panel label { align-items: flex-start; }
+.sel-suc-panel input { margin-top: 3px; }
+.sel-suc-panel .b-claro { justify-self: start; }
+
+/* Botones del producto */
+.prod-acc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; }
+.b-azul, .b-claro { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: 600 13px var(--f-body); border-radius: 6px; padding: 7px 12px; cursor: pointer; border: 0; text-decoration: none; }
+.b-azul { background: var(--azul); color: #fff; }
+.b-azul:hover { background: var(--azul-hover); }
+.b-claro { background: var(--azul-soft); color: var(--azul); }
+.b-claro:hover { background: #d0e1f9; }
+.cant { display: inline-flex; align-items: center; border: 1px solid var(--azul); border-radius: 6px; overflow: hidden; }
+.cant button { border: 0; background: var(--surface); color: var(--azul); font: 700 16px var(--f-body); width: 32px; height: 32px; cursor: pointer; }
+.cant button:hover { background: var(--azul-soft); }
+.cant span { min-width: 64px; text-align: center; font-size: 13px; font-weight: 600; color: var(--azul); padding: 0 4px; }
+
+/* Ventanas (carrito y compartir) */
+dialog { border: 0; padding: 0; background: var(--surface); color: var(--ink); box-shadow: 0 8px 32px rgba(0,0,0,.25); }
+dialog::backdrop { background: rgba(0,0,0,.45); }
+.dlg-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--surface); z-index: 1; }
+.dlg-cab h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.cerrar { border: 0; background: none; font-size: 26px; line-height: 1; cursor: pointer; color: var(--muted); padding: 2px 6px; border-radius: 6px; }
+.cerrar:hover { background: var(--bg); }
+#dlg-carrito { margin: 0 0 0 auto; height: 100%; max-height: 100%; width: min(440px, 100%); max-width: 100%; border-radius: 0; overflow-y: auto; }
+.car-vacio { padding: 32px 20px; text-align: center; color: var(--muted); }
+.car-items { list-style: none; margin: 0; padding: 0; }
+.car-item { display: grid; grid-template-columns: 52px minmax(0,1fr) auto; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--line); align-items: center; }
+.car-item .foto { height: 52px; }
+.car-item .foto img { max-height: 52px; }
+.car-item .foto .icono { width: 44px; height: 44px; font-size: 22px; }
+.car-nom { font-size: 14px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.car-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.car-item .cant button { width: 28px; height: 28px; }
+.car-item .cant span { min-width: 28px; }
+.car-tot { padding: 16px 18px; display: grid; gap: 10px; }
+.car-tot h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.ranking { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ranking li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 2px 10px; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+.ranking li.mejor { border-color: var(--verde); background: var(--verde-soft); }
+.ranking .nom { font-weight: 600; }
+.ranking .tot { font-size: 18px; font-variant-numeric: tabular-nums; text-align: right; }
+.ranking li.mejor .tot { color: var(--verde); font-weight: 700; }
+.ranking .det { grid-column: 1 / -1; font-size: 12px; color: var(--muted); }
+.ranking .falta { color: #b45309; }
+.combi { background: var(--azul-soft); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+.combi strong { font-variant-numeric: tabular-nums; }
+.car-botones { display: flex; flex-wrap: wrap; gap: 8px; }
+#dlg-compartir { width: min(400px, calc(100% - 32px)); border-radius: 10px; }
+.comp-cuerpo { padding: 16px 18px 20px; display: grid; gap: 10px; }
+.comp-txt { font-size: 14px; color: var(--muted); margin: 0; overflow-wrap: anywhere; }
+.redes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.red { display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 8px; padding: 12px; font: 600 14px var(--f-body); color: #fff; cursor: pointer; text-decoration: none; }
+.red.wa { background: #1fa855; } .red.fb { background: #1877f2; }
+.red.ig { background: linear-gradient(45deg, #f09433, #dc2743 50%, #bc1888); }
+.red.cp { background: #555; }
+.red.mas-op { grid-column: 1 / -1; background: var(--azul-soft); color: var(--azul); }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 14px; z-index: 50; max-width: calc(100% - 32px); text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,.3); }
+
+/* Sucursales */
+.sucursales { margin-top: 32px; scroll-margin-top: 170px; }
+@media (max-width: 480px) { .sucursales { scroll-margin-top: 16px; } }
+.sucursales h2 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+.sucursales .sub { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+#mapa { height: 340px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.12); margin-bottom: 12px; background: #dfe7ea; z-index: 0; }
+.suc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.suc { background: var(--surface); border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.12); padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.suc-cad { font-size: 12px; font-weight: 700; color: var(--azul); text-transform: uppercase; letter-spacing: .04em; }
+.suc-dir { font-size: 16px; font-weight: 600; }
+.suc-hoy { font-size: 13px; }
+.suc-hoy b { color: var(--verde); }
+.suc details { font-size: 13px; color: var(--muted); }
+.suc summary { cursor: pointer; color: var(--azul); }
+.suc table { border-collapse: collapse; margin-top: 4px; }
+.suc td { padding: 1px 12px 1px 0; }
+.suc tr.hoy td { color: var(--ink); font-weight: 600; }
+.suc .b-claro { justify-self: start; margin-top: 4px; }
+@media (max-width: 480px) {
+  .nav-acc { order: 2; }
+  .btn-nav .txt { display: none; }
+  .nav-acc .btn-nav.carrito .txt { display: inline; }
+  #mapa { height: 260px; }
+}
 input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .prod { transition: none; } }
 </style>
@@ -125,6 +247,11 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
         <input id="q" type="search" placeholder="Buscar productos, marcas y más…" aria-label="Buscar producto" autocomplete="off">
         <button type="submit" aria-label="Buscar"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       </form>
+      <div class="nav-acc">
+        <a class="btn-nav" href="#sucursales"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.9-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.3" fill="currentColor"/></svg><span class="txt">Sucursales</span></a>
+        <button class="btn-nav" type="button" id="compartir-pagina" aria-label="Compartir la página"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="19" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4" stroke="currentColor" stroke-width="1.8"/></svg><span class="txt">Compartir</span></button>
+        <button class="btn-nav carrito" type="button" id="abrir-carrito" aria-label="Mi carrito"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.5" fill="currentColor"/><circle cx="17" cy="19" r="1.5" fill="currentColor"/></svg><span class="txt">Mi carrito</span><span class="badge" id="car-n"></span></button>
+      </div>
     </div>
     <nav class="cats" id="cats" aria-label="Categorías"></nav>
   </div></div>
@@ -137,14 +264,26 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     <div>
       <h1>Supermercados de Puerto Madryn</h1>
       <div class="meta" id="meta">Cargando precios…</div>
+      <div class="actualizado" id="actualizado"></div>
     </div>
-    <label class="orden">Ordenar por
+  </div>
+
+  <div class="filtros">
+    <label>Ordenar por
       <select id="orden">
-        <option value="nombre">Nombre</option>
+        <option value="nombre">Nombre (A-Z)</option>
         <option value="barato">Menor precio</option>
-        <option value="ahorro">Mayor diferencia</option>
+        <option value="caro">Mayor precio</option>
+        <option value="ahorro">Mayor ahorro ($)</option>
+        <option value="ahorropct">Mayor ahorro (%)</option>
+        <option value="promo">Ofertas primero</option>
       </select>
     </label>
+    <label>Supermercado
+      <select id="super"><option value="">Todos</option></select>
+    </label>
+    <details class="sel-suc" id="sel-suc"><summary>Comparar: <b id="sel-suc-txt">Todas las sucursales</b></summary><div class="sel-suc-panel" id="sel-suc-lista"></div></details>
+    <label><input type="checkbox" id="multi"> Solo productos en 2 o más súper</label>
   </div>
 
   <div id="banner-top"></div>
@@ -152,10 +291,34 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     <p class="resumen" id="resumen"></p>
     <div class="lista" id="lista"></div>
   </main>
+  <section class="sucursales" id="sucursales">
+    <h2>Sucursales y horarios</h2>
+    <p class="sub">Tocá "Cómo llegar" para abrir el recorrido en Google Maps.</p>
+    <div id="mapa" hidden></div>
+    <div class="suc-grid" id="suc-grid"></div>
+  </section>
   <footer class="pie">
     <img src="https://hits.sh/computacionmadryn-cloud.github.io/precios-madryn.svg?label=Visitas&amp;color=3483fa&amp;labelColor=2d3277&amp;style=flat-square" alt="Contador de visitas" height="20" referrerpolicy="no-referrer">
   </footer>
 </div></div>
+
+<dialog id="dlg-carrito" aria-labelledby="car-titulo">
+  <div class="dlg-cab"><h2 id="car-titulo">Mi carrito</h2><button class="cerrar" type="button" data-cerrar aria-label="Cerrar">×</button></div>
+  <div id="car-cuerpo"></div>
+</dialog>
+<dialog id="dlg-compartir" aria-labelledby="comp-titulo">
+  <div class="dlg-cab"><h2 id="comp-titulo">Compartir</h2><button class="cerrar" type="button" data-cerrar aria-label="Cerrar">×</button></div>
+  <div class="comp-cuerpo">
+    <p class="comp-txt" id="comp-txt"></p>
+    <div class="redes">
+      <a class="red wa" id="comp-wa" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="red fb" id="comp-fb" target="_blank" rel="noopener">Facebook</a>
+      <button class="red ig" type="button" id="comp-ig">Instagram</button>
+      <button class="red cp" type="button" id="comp-cp">Copiar link</button>
+      <button class="red mas-op" type="button" id="comp-mas" hidden>Más opciones…</button>
+    </div>
+  </div>
+</dialog>
 
 <script id="datos-ejemplo" type="application/json">{"generado":"2026-10-22T19:28+00:00","fuente":"Datos de ejemplo (inventados)","ejemplo":true,"sucursales":[{"id":"11-2-501","cadena":"Carrefour","nombre":"Carrefour Market Madryn","direccion":"28 De Julio 136","lat":null,"lon":-65.035,"actualizado":"2026-10-21 08:00:00"},{"id":"16-1-300","cadena":"ChangoMás","nombre":"Changomas Madryn","direccion":"Av. Roca 2000","lat":null,"lon":-65.05,"actualizado":"2026-10-21 08:00:00"},{"id":"10-1-14","cadena":"La Anónima","nombre":"La Anonima Centro","direccion":"25 De Mayo 301","lat":null,"lon":-65.036,"actualizado":"2026-10-21 08:00:00"},{"id":"10-1-45","cadena":"La Anónima","nombre":"La Anonima Sur","direccion":"Av. Gales 1200","lat":null,"lon":-65.045,"actualizado":"2026-10-21 08:00:00"},{"id":"15-3-88","cadena":"Vea","nombre":"Vea Madryn","direccion":"Av. Juan B. Justo 500","lat":null,"lon":-65.04,"actualizado":"2026-10-21 08:00:00"}],"productos":[{"id":"7790387000046","nombre":"Aceite de Girasol Natura 1.5 L","marca":"Natura","presentacion":"1.5 lt","categoria":"Almacén","ean":true,"precios":{"10-1-45":[3773.05],"11-2-501":[4253.14],"16-1-300":[3817.44]}},{"id":"7790742656003","nombre":"Agua Mineral Villavicencio 2 L","marca":"Villavicencio","presentacion":"2 lt","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[1315.6],"10-1-45":[1174.53],"11-2-501":[1393.28],"15-3-88":[1431.11],"16-1-300":[1139.57]}},{"id":"7790040930124","nombre":"Alfajor Triple Chocolate","marca":"Guaymallen","presentacion":"1 un","categoria":"Panadería y galletitas","ean":true,"precios":{"10-1-14":[650.55],"10-1-45":[572.51,458.01],"11-2-501":[707.48],"15-3-88":[695.65,556.52],"16-1-300":[576.23]}},{"id":"7790150070125","nombre":"Arroz Largo Fino Gallo 1 Kg","marca":"Gallo","presentacion":"1 kg","categoria":"Almacén","ean":true,"precios":{"10-1-14":[2112.11],"10-1-45":[1903.51],"11-2-501":[2272.9],"15-3-88":[2465.66],"16-1-300":[1950.98]}},{"id":"7790580122224","nombre":"Azucar Ledesma 1 Kg","marca":"Ledesma","presentacion":"1 kg","categoria":"Desayuno","ean":true,"precios":{"10-1-45":[1273.73],"11-2-501":[1715.69],"15-3-88":[1535.48],"16-1-300":[1364.41]}},{"id":"7791813421696","nombre":"Cafe Instantaneo La Virginia 170 g","marca":"La Virginia","presentacion":"170 gr","categoria":"Desayuno","ean":true,"precios":{"10-1-14":[6373.48,5098.78],"10-1-45":[5948.59,4758.87],"11-2-501":[7030.49,5624.39],"15-3-88":[7137.86]}},{"id":"7790250012019","nombre":"Cerveza Quilmes Lata 473 cc","marca":"Quilmes","presentacion":"473 cc","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[1743.22],"10-1-45":[1512.64],"15-3-88":[1984.73],"16-1-300":[1636.19]}},{"id":"7790070411716","nombre":"Dulce de Leche Clasico 400 g","marca":"La Serenisima","presentacion":"400 gr","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[2316.38],"10-1-45":[2125.88],"15-3-88":[2464.13],"16-1-300":[2205.9]}},{"id":"7792180001665","nombre":"Fideos Spaghetti Matarazzo 500 g","marca":"Matarazzo","presentacion":"500 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[1646.79,1317.43],"10-1-45":[1556.37],"15-3-88":[1771.08],"16-1-300":[1542.31,1233.85]}},{"id":"7790040613102","nombre":"Galletitas Criollitas 300 g","marca":"Bagley","presentacion":"300 gr","categoria":"Panadería y galletitas","ean":true,"precios":{"10-1-45":[1323.99,1059.19],"11-2-501":[1727.29,1381.83],"15-3-88":[1695.49]}},{"id":"7790895000997","nombre":"Gaseosa Coca-Cola 2.25 L","marca":"Coca-Cola","presentacion":"2.25 lt","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[3327.26],"15-3-88":[3664.37,2931.5],"16-1-300":[3084.9]}},{"id":"7790310981120","nombre":"Harina 000 Blancaflor 1 Kg","marca":"Blancaflor","presentacion":"1 kg","categoria":"Almacén","ean":true,"precios":{"10-1-14":[1207.5,966.0],"11-2-501":[1394.41],"15-3-88":[1388.99],"16-1-300":[1150.95,920.76]}},{"id":"7790070012050","nombre":"Leche Entera La Serenisima 1 L","marca":"La Serenisima","presentacion":"1 lt","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[1361.52,1089.22],"10-1-45":[1279.51],"11-2-501":[1602.03],"15-3-88":[1566.78],"16-1-300":[1188.39]}},{"id":"7790070507051","nombre":"Manteca 200 g","marca":"La Serenisima","presentacion":"200 gr","categoria":"Lácteos","ean":true,"precios":{"10-1-45":[2351.53],"15-3-88":[2921.49],"16-1-300":[2473.49]}},{"id":"7794000960107","nombre":"Mayonesa Hellmanns 475 g","marca":"Hellmanns","presentacion":"475 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[2723.97,2179.18],"10-1-45":[2780.05],"11-2-501":[3202.69],"15-3-88":[3345.79]}},{"id":"10-PROP10","nombre":"Pan Frances Por Kg","marca":"La Anonima","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"10-1-14":[2452.4],"10-1-45":[2274.5]}},{"id":"11-PROP11","nombre":"Pan Frances Por Kg","marca":"Carrefour Market","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"11-2-501":[2812.21]}},{"id":"15-PROP15","nombre":"Pan Frances Por Kg","marca":"Vea","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"15-3-88":[2757.19]}},{"id":"16-PROP16","nombre":"Pan Frances Por Kg","marca":"Changomas","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"16-1-300":[2295.34]}},{"id":"7790670051345","nombre":"Pure de Tomate Arcor 520 g","marca":"Arcor","presentacion":"520 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[851.23],"10-1-45":[845.73],"11-2-501":[1055.56],"15-3-88":[944.66],"16-1-300":[827.18,661.74]}},{"id":"7792900000016","nombre":"Queso Cremoso Por Kg","marca":"La Paulina","presentacion":"1 kg","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[9308.05],"10-1-45":[9193.74,7354.99],"11-2-501":[10908.76],"15-3-88":[10950.76],"16-1-300":[9232.87]}},{"id":"7790580660009","nombre":"Yerba Mate Playadito 1 Kg","marca":"Playadito","presentacion":"1 kg","categoria":"Desayuno","ean":true,"precios":{"10-1-14":[5069.78,4055.82],"10-1-45":[4672.54],"11-2-501":[5836.98,4669.58],"15-3-88":[5957.39],"16-1-300":[5049.52,4039.62]}},{"id":"7790070318114","nombre":"Yogur Bebible Frutilla 1 Kg","marca":"La Serenisima","presentacion":"1 kg","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[2434.44],"10-1-45":[2411.82],"11-2-501":[2800.31,2240.25],"15-3-88":[2846.46,2277.17],"16-1-300":[2456.93,1965.54]}}]}</script>
 <script>
@@ -176,15 +339,49 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
       (a.texto && !a.imagen ? `<div class="publi-txt">${esc(a.texto)}</div>` : "");
     return href ? `<a class="publi" href="${esc(href)}" target="_blank" rel="noopener sponsored">${cont}</a>` : `<div class="publi">${cont}</div>`;
   }
-  let D = null, cadenas = [], productos = [], cat = "Todas", limite = PAGINA;
+  let activas = new Set(), D = null, cadenas = [], productos = [], porId = {}, cat = "Todas", limite = PAGINA;
+  const TZ = "America/Argentina/Buenos_Aires";
+  const PUBLICA = "https://computacionmadryn-cloud.github.io/precios-madryn/";
+  const BASE = /^https?:$/.test(location.protocol) && !/claude|localhost|127\.0\.0\.1/.test(location.hostname) ? location.origin + location.pathname : PUBLICA;
+  const PIN = '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.9-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.3" fill="currentColor"/></svg>';
+
+  // Carrito: {id de producto: cantidad}, guardado en este navegador.
+  const CLAVE = "pm-carrito";
+  let carrito = (() => { try { const c = JSON.parse(localStorage.getItem(CLAVE) || "{}"); return c && typeof c === "object" ? c : {}; } catch (e) { return {}; } })();
+  const guardarCarrito = () => { try { localStorage.setItem(CLAVE, JSON.stringify(carrito)); } catch (e) {} };
 
   const norm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
   function preparar(datos) {
     D = datos;
+    const ids = datos.sucursales.map((s) => s.id);
+    let guardadas = [];
+    try { guardadas = JSON.parse(localStorage.getItem("pm-sucursales") || "[]"); } catch (e) {}
+    activas = new Set(Array.isArray(guardadas) ? guardadas.filter((id) => ids.includes(id)) : []);
+    if (!activas.size) activas = new Set(ids);
+    const orden = [...datos.sucursales].sort((a, b) => a.cadena.localeCompare(b.cadena, "es") || a.direccion.localeCompare(b.direccion, "es"));
+    $("sel-suc-lista").innerHTML = orden.map((s) =>
+      `<label><input type="checkbox" value="${esc(s.id)}"${activas.has(s.id) ? " checked" : ""}> <span><b>${esc(s.cadena)}</b> ${esc(s.direccion)}</span></label>`).join("") +
+      `<button class="b-claro" type="button" id="sel-suc-todas">Marcar todas</button>`;
+    calcular();
+    const fecha = new Date(datos.generado);
+    const [txt, viejo] = textoActualizado(fecha);
+    $("actualizado").textContent = txt;
+    $("actualizado").classList.toggle("viejo", viejo);
+    $("aviso").hidden = !datos.ejemplo;
+    sucursales(datos.sucursales);
+    actualizarCarrito();
+    render();
+  }
+
+  // Recalcula los precios usando solo las sucursales marcadas.
+  function calcular() {
+    const datos = D;
     const porSucursal = {};
-    datos.sucursales.forEach((s) => { porSucursal[s.id] = s; });
-    cadenas = [...new Set(datos.sucursales.map((s) => s.cadena))].sort();
+    datos.sucursales.forEach((s) => { if (activas.has(s.id)) porSucursal[s.id] = s; });
+    cadenas = [...new Set(Object.values(porSucursal).map((s) => s.cadena))].sort();
+    const n = Object.keys(porSucursal).length;
+    $("sel-suc-txt").textContent = n === datos.sucursales.length ? "Todas las sucursales" : `${n} de ${datos.sucursales.length} sucursales`;
     productos = datos.productos.map((p) => {
       // Precio final por cadena = el más bajo (promo o lista) entre sus sucursales.
       const porCadena = {};
@@ -196,28 +393,73 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
       }
       const vals = Object.values(porCadena).map((x) => x.final);
       const min = Math.min(...vals), max = Math.max(...vals);
-      return { ...p, porCadena, min, max, dif: vals.length > 1 ? (max - min) / min : 0, texto: norm(p.nombre + " " + p.marca) };
+      const off = Math.max(0, ...Object.values(porCadena).map((x) => (x.promo ? 1 - x.final / x.lista : 0)));
+      return { ...p, porCadena, min, max, ahorro: max - min, dif: vals.length > 1 ? (max - min) / min : 0, off, texto: norm(p.nombre + " " + p.marca) };
     }).filter((p) => isFinite(p.min));
+    porId = {};
+    productos.forEach((p) => { porId[p.id] = p; });
+    const sup = $("super").value;
+    $("super").innerHTML = `<option value="">Todos</option>` + cadenas.map((c) => `<option>${esc(c)}</option>`).join("");
+    $("super").value = cadenas.includes(sup) ? sup : "";
 
     const cats = ["Todas", ...[...new Set(productos.map((p) => p.categoria))].sort()];
     $("cats").innerHTML = cats.map((c) => `<button class="chip" type="button" aria-pressed="${c === cat}" data-cat="${c}">${c}</button>`).join("");
-    const fecha = new Date(datos.generado);
-    $("meta").textContent = `${productos.length.toLocaleString("es-AR")} productos · ${datos.sucursales.length} sucursales · actualizado ${fecha.toLocaleDateString("es-AR")}`;
-    $("aviso").hidden = !datos.ejemplo;
-    render();
+    $("meta").textContent = `${productos.length.toLocaleString("es-AR")} productos · ${datos.sucursales.length} sucursales`;
+  }
+  $("sel-suc-lista").addEventListener("change", () => {
+    activas = new Set([...$("sel-suc-lista").querySelectorAll("input:checked")].map((x) => x.value));
+    if (!activas.size) { activas = new Set(D.sucursales.map((s) => s.id)); $("sel-suc-lista").querySelectorAll("input").forEach((x) => { x.checked = true; }); }
+    try { localStorage.setItem("pm-sucursales", JSON.stringify([...activas])); } catch (e) {}
+    calcular(); limite = PAGINA; actualizarCarrito(); render();
+  });
+  $("sel-suc-lista").addEventListener("click", (e) => {
+    if (e.target.id !== "sel-suc-todas") return;
+    $("sel-suc-lista").querySelectorAll("input").forEach((x) => { x.checked = true; });
+    $("sel-suc-lista").dispatchEvent(new Event("change"));
+  });
+  document.addEventListener("click", (e) => { if (!e.target.closest("#sel-suc")) $("sel-suc").open = false; });
+
+  function textoActualizado(f) {
+    if (isNaN(f)) return ["", false];
+    const dia = (d) => d.toLocaleDateString("en-CA", { timeZone: TZ });
+    const hora = f.toLocaleTimeString("es-AR", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hour12: false });
+    let cuando;
+    if (dia(f) === dia(new Date())) cuando = `hoy a las ${hora}`;
+    else if (dia(f) === dia(new Date(Date.now() - 864e5))) cuando = `ayer a las ${hora}`;
+    else cuando = `el ${f.toLocaleDateString("es-AR", { timeZone: TZ, day: "numeric", month: "long" })} a las ${hora}`;
+    const viejo = Date.now() - f > 2 * 864e5;
+    return [`Precios actualizados ${cuando}` + (viejo ? " · pueden haber cambiado" : ""), viejo];
   }
 
   function filtrados() {
     const terms = norm($("q").value).split(/\s+/).filter(Boolean);
-    let r = productos.filter((p) => (cat === "Todas" || p.categoria === cat) && terms.every((t) => p.texto.includes(t)));
+    const sup = $("super").value, multi = $("multi").checked;
+    let r = productos.filter((p) => (cat === "Todas" || p.categoria === cat) && (!sup || p.porCadena[sup]) &&
+      (!multi || Object.keys(p.porCadena).length > 1) && terms.every((t) => p.texto.includes(t)));
+    const precio = (p) => (sup ? p.porCadena[sup].final : p.min);
     const o = $("orden").value;
-    if (o === "barato") r.sort((a, b) => a.min - b.min);
-    else if (o === "ahorro") r.sort((a, b) => b.dif - a.dif);
+    if (o === "barato") r.sort((a, b) => precio(a) - precio(b));
+    else if (o === "caro") r.sort((a, b) => precio(b) - precio(a));
+    else if (o === "ahorro") r.sort((a, b) => b.ahorro - a.ahorro);
+    else if (o === "ahorropct") r.sort((a, b) => b.dif - a.dif);
+    else if (o === "promo") r.sort((a, b) => b.off - a.off || a.nombre.localeCompare(b.nombre, "es"));
     else r.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
     return r;
   }
 
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  const fotoHTML = (p) => fotos[p.id]
+    ? `<img src="${esc(fotos[p.id])}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML='<span class=&quot;icono&quot;>${ICONOS[p.categoria] || "🛒"}</span>'">`
+    : `<span class="icono" aria-hidden="true">${ICONOS[p.categoria] || "🛒"}</span>`;
+
+  function acciones(p) {
+    const n = carrito[p.id];
+    return (n
+      ? `<span class="cant"><button type="button" data-menos aria-label="Sacar uno">−</button><span>${n} en carrito</span><button type="button" data-mas aria-label="Agregar uno">+</button></span>`
+      : `<button class="b-azul" type="button" data-agregar>Agregar al carrito</button>`) +
+      `<button class="b-claro" type="button" data-compartir>Compartir</button>`;
+  }
 
   function tarjeta(p) {
     const multi = Object.keys(p.porCadena).length > 1;
@@ -226,11 +468,9 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     const off = best.promo ? Math.round((1 - best.final / best.lista) * 100) : 0;
     const otros = (multi ? orden : []).map((c, i) => {
       const x = p.porCadena[c];
-      return `<li class="${i === 0 ? "mejor" : ""}" title="${esc(x.suc)}"><span>${i + 1}. ${esc(c)}${x.promo ? `<span class="promo">promo</span>` : ""}</span><span>${fmt.format(x.final)}</span></li>`;
+      return `<li class="${i === 0 ? "mejor" : ""}${c === $("super").value ? " elegido" : ""}" title="${esc(x.suc)}"><span>${i + 1}. ${esc(c)}${x.promo ? `<span class="promo">promo</span>` : ""}</span><span>${fmt.format(x.final)}</span></li>`;
     }).join("");
-    const foto = fotos[p.id]
-      ? `<img src="${esc(fotos[p.id])}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML='<span class=&quot;icono&quot;>${ICONOS[p.categoria] || "🛒"}</span>'">`
-      : `<span class="icono" aria-hidden="true">${ICONOS[p.categoria] || "🛒"}</span>`;
+    const foto = fotoHTML(p);
     return `<article class="prod">
       <div class="foto">${foto}</div>
       <div class="prod-texto">
@@ -243,6 +483,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
         <div class="precio-grande"><span class="val">${fmt.format(best.final)}</span>${off > 0 ? `<span class="off">${off}% OFF</span>` : ""}</div>
         ${multi ? "" : `<div class="donde solo">Solo en ${esc(orden[0])}</div>`}
         ${otros ? `<ul class="otros">${otros}</ul>` : ""}
+        <div class="prod-acc" data-id="${esc(p.id)}">${acciones(p)}</div>
       </div>
     </article>`;
   }
@@ -256,7 +497,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   }
 
   $("q").addEventListener("input", () => { limite = PAGINA; render(); });
-  $("orden").addEventListener("change", () => { limite = PAGINA; render(); });
+  ["orden", "super", "multi"].forEach((id) => $(id).addEventListener("change", () => { limite = PAGINA; render(); }));
   $("cats").addEventListener("click", (e) => {
     const b = e.target.closest("[data-cat]"); if (!b) return;
     cat = b.dataset.cat; limite = PAGINA;
@@ -264,8 +505,171 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     render();
   });
   $("lista").addEventListener("click", (e) => {
-    if (e.target.id === "mas") { limite += PAGINA; render(); }
+    if (e.target.id === "mas") { limite += PAGINA; render(); return; }
+    const acc = e.target.closest(".prod-acc"); if (!acc) return;
+    const p = porId[acc.dataset.id]; if (!p) return;
+    if (e.target.closest("[data-agregar], [data-mas]")) cambiar(p.id, 1);
+    else if (e.target.closest("[data-menos]")) cambiar(p.id, -1);
+    else if (e.target.closest("[data-compartir]")) {
+      const c = cadenas.filter((x) => p.porCadena[x]).sort((a, b) => p.porCadena[a].final - p.porCadena[b].final)[0];
+      compartir(`${p.nombre}: ${fmt.format(p.min)} en ${c}. Mirá los precios de todos los súper de Madryn:`, BASE + "?q=" + encodeURIComponent(p.nombre));
+    }
   });
+
+  // ---------- Carrito ----------
+  function cambiar(id, d) {
+    const n = (carrito[id] || 0) + d;
+    if (n <= 0) delete carrito[id]; else carrito[id] = Math.min(n, 99);
+    guardarCarrito();
+    actualizarCarrito(id);
+  }
+  function actualizarCarrito(id) {
+    const n = Object.keys(carrito).filter((k) => porId[k]).reduce((a, k) => a + carrito[k], 0);
+    $("car-n").textContent = n || "";
+    if (id) document.querySelectorAll(".prod-acc").forEach((el) => { if (el.dataset.id === id) el.innerHTML = acciones(porId[id]); });
+    if ($("dlg-carrito").open) renderCarrito();
+  }
+  function totales(items) {
+    return cadenas.map((c) => {
+      let tot = 0, faltan = 0;
+      items.forEach(({ p, n }) => { const x = p.porCadena[c]; if (x) tot += x.final * n; else faltan++; });
+      return { c, tot, faltan };
+    }).sort((a, b) => a.faltan - b.faltan || a.tot - b.tot);
+  }
+  function renderCarrito() {
+    const items = Object.entries(carrito).map(([id, n]) => ({ p: porId[id], n })).filter((x) => x.p);
+    if (!items.length) {
+      $("car-cuerpo").innerHTML = `<p class="car-vacio">Tu carrito está vacío.<br>Tocá <strong>Agregar al carrito</strong> en los productos para armar tu compra y ver en qué supermercado te sale más barata.</p>`;
+      return;
+    }
+    const rank = totales(items);
+    const completo = rank.filter((r) => !r.faltan);
+    const mejor = completo[0];
+    const combi = items.reduce((a, { p, n }) => a + p.min * n, 0);
+    const lis = rank.map((r) => {
+      if (r.faltan === items.length) return `<li><span class="nom">${esc(r.c)}</span><span class="tot">—</span><span class="det falta">No tiene ninguno de estos productos</span></li>`;
+      const det = r.faltan
+        ? `<span class="falta">No tiene ${r.faltan} de ${items.length} producto${items.length > 1 ? "s" : ""}</span> · total de lo que tiene`
+        : r === mejor ? "Tiene todo · el más barato" : `Tiene todo · ${fmt.format(r.tot - mejor.tot)} más caro`;
+      return `<li class="${r === mejor ? "mejor" : ""}"><span class="nom">${esc(r.c)}</span><span class="tot">${fmt.format(r.tot)}</span><span class="det">${det}</span></li>`;
+    }).join("");
+    const lineas = items.map(({ p, n }) => {
+      const c = cadenas.filter((x) => p.porCadena[x]).sort((a, b) => p.porCadena[a].final - p.porCadena[b].final)[0];
+      return `<li class="car-item" data-id="${esc(p.id)}"><div class="foto">${fotoHTML(p)}</div>
+        <div><div class="car-nom">${esc(p.nombre)}</div><div class="car-sub">Desde ${fmt.format(p.min)} en ${esc(c)}</div></div>
+        <span class="cant"><button type="button" data-menos aria-label="Sacar uno">−</button><span>${n}</span><button type="button" data-mas aria-label="Agregar uno">+</button></span></li>`;
+    }).join("");
+    $("car-cuerpo").innerHTML = `<div class="car-tot">
+        <h3>¿Dónde me conviene comprar todo?</h3>
+        <ol class="ranking">${lis}</ol>
+        ${items.length > 1 && (!mejor || combi < mejor.tot - 0.5) ? `<div class="combi">Si comprás cada producto donde está más barato: <strong>${fmt.format(combi)}</strong>${mejor ? ` (ahorrás ${fmt.format(mejor.tot - combi)})` : ""}</div>` : ""}
+      </div>
+      <ul class="car-items">${lineas}</ul>
+      <div class="car-tot car-botones">
+        <button class="b-azul" type="button" id="car-compartir">Compartir mi lista</button>
+        <button class="b-claro" type="button" id="car-vaciar">Vaciar carrito</button>
+      </div>`;
+  }
+  $("abrir-carrito").addEventListener("click", () => { renderCarrito(); $("dlg-carrito").showModal(); });
+  $("car-cuerpo").addEventListener("click", (e) => {
+    const it = e.target.closest(".car-item");
+    if (it && e.target.closest("[data-mas]")) cambiar(it.dataset.id, 1);
+    else if (it && e.target.closest("[data-menos]")) cambiar(it.dataset.id, -1);
+    else if (e.target.id === "car-vaciar") {
+      if (!confirm("¿Vaciar el carrito?")) return;
+      const ids = Object.keys(carrito); carrito = {}; guardarCarrito();
+      ids.forEach((id) => actualizarCarrito(id)); actualizarCarrito();
+    } else if (e.target.id === "car-compartir") {
+      const items = Object.entries(carrito).map(([id, n]) => ({ p: porId[id], n })).filter((x) => x.p);
+      const mejor = totales(items).find((r) => !r.faltan);
+      const txt = "Mi lista de compras:\n" + items.map(({ p, n }) => `• ${n} x ${p.nombre}`).join("\n") +
+        (mejor ? `\nMás barato en ${mejor.c}: ${fmt.format(mejor.tot)}` : "") + "\nArmá la tuya en Precios Madryn:";
+      compartir(txt, BASE);
+    }
+  });
+  document.querySelectorAll("dialog").forEach((d) => {
+    d.addEventListener("click", (e) => { if (e.target === d || e.target.closest("[data-cerrar]")) d.close(); });
+  });
+
+  // ---------- Compartir ----------
+  let compartiendo = null;
+  function toast(msg) {
+    const t = document.createElement("div"); t.className = "toast"; t.textContent = msg;
+    document.body.appendChild(t); setTimeout(() => t.remove(), 3500);
+  }
+  function copiar(txt) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(txt);
+    const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select();
+    try { document.execCommand("copy"); } finally { a.remove(); }
+    return Promise.resolve();
+  }
+  function compartir(texto, url) {
+    compartiendo = { texto, url };
+    $("comp-txt").textContent = texto.split("\n")[0];
+    $("comp-wa").href = "https://wa.me/?text=" + encodeURIComponent(texto + " " + url);
+    $("comp-fb").href = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+    $("comp-mas").hidden = !navigator.share;
+    if ($("dlg-carrito").open) $("dlg-carrito").close();
+    $("dlg-compartir").showModal();
+  }
+  const nativo = () => navigator.share({ title: "Precios Madryn", text: compartiendo.texto, url: compartiendo.url }).catch(() => {});
+  $("comp-mas").addEventListener("click", nativo);
+  $("comp-cp").addEventListener("click", () => copiar(compartiendo.url).then(() => toast("Link copiado")).catch(() => toast("No se pudo copiar")));
+  $("comp-ig").addEventListener("click", () => {
+    // Instagram no tiene link para compartir desde la web: en el celular usamos el menú del sistema; en la compu, copiamos el link.
+    if (navigator.share && matchMedia("(pointer: coarse)").matches) return nativo();
+    copiar(compartiendo.url).then(() => toast("Link copiado. Pegalo en tu historia de Instagram (sticker “Enlace”) o en tu bio."));
+  });
+  $("compartir-pagina").addEventListener("click", () =>
+    compartir("Compará los precios de La Anónima, Vea, Carrefour y ChangoMás en Puerto Madryn y comprá donde sale más barato:", BASE));
+
+  // ---------- Sucursales ----------
+  const DIAS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+  const NOMBRE_DIA = { lunes: "Lunes", martes: "Martes", miercoles: "Miércoles", jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo" };
+  const COLOR = { "Carrefour": "#1e5bc6", "ChangoMás": "#e4002b", "La Anónima": "#00843d", "Vea": "#f39200" };
+  const conCoord = (s) => typeof s.lat === "number" && typeof s.lon === "number" && Math.abs(s.lat) > 1 && Math.abs(s.lon) > 1;
+  function sucursales(lista) {
+    const hoy = DIAS[DIAS.indexOf(norm(new Date().toLocaleDateString("es-AR", { timeZone: TZ, weekday: "long" })))] || "";
+    const orden = [...lista].sort((a, b) => a.cadena.localeCompare(b.cadena, "es") || a.direccion.localeCompare(b.direccion, "es"));
+    $("suc-grid").innerHTML = orden.map((s) => {
+      const h = s.horarios || {};
+      const tiene = Object.values(h).some(Boolean);
+      const destino = conCoord(s)
+        ? `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}`
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.cadena} ${s.direccion}, Puerto Madryn, Chubut`)}`;
+      const tabla = Object.keys(NOMBRE_DIA).map((d) => `<tr class="${d === hoy ? "hoy" : ""}"><td>${NOMBRE_DIA[d]}</td><td>${esc(h[d] || "No informado")}</td></tr>`).join("");
+      return `<article class="suc">
+        <div class="suc-cad">${esc(s.cadena)}</div>
+        <div class="suc-dir">${esc(s.direccion)}</div>
+        <div class="prod-info">${esc((s.nombre || "").replace(/\.+$/, ""))}</div>
+        ${tiene
+          ? `<div class="suc-hoy">Hoy: <b>${esc(h[hoy] || "No informado")}</b></div><details><summary>Ver horarios de la semana</summary><table>${tabla}</table></details>`
+          : `<div class="suc-hoy prod-info">Horarios no informados</div>`}
+        <a class="b-claro" href="${esc(destino)}" target="_blank" rel="noopener">${PIN} Cómo llegar</a>
+      </article>`;
+    }).join("");
+    mapa(lista.filter(conCoord));
+  }
+  function mapa(lista) {
+    if (!lista.length || window.L) return;
+    const css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    document.head.appendChild(css);
+    const js = document.createElement("script");
+    js.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    js.onload = () => {
+      $("mapa").hidden = false;
+      const m = L.map("mapa", { scrollWheelZoom: false });
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(m);
+      lista.forEach((s) => L.circleMarker([s.lat, s.lon], { radius: 9, color: "#fff", weight: 2, fillColor: COLOR[s.cadena] || "#3483fa", fillOpacity: 1 })
+        .addTo(m).bindPopup(`<b>${esc(s.cadena)}</b><br>${esc(s.direccion)}`));
+      m.fitBounds(lista.map((s) => [s.lat, s.lon]), { padding: [30, 30], maxZoom: 15 });
+    };
+    document.head.appendChild(js);
+  }
+
+  const qInicial = new URLSearchParams(location.search).get("q");
+  if (qInicial) $("q").value = qInicial;
   function ejemplo() {
     try { return JSON.parse($("datos-ejemplo").textContent); } catch (e) { return null; }
   }

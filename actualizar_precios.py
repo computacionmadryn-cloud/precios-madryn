@@ -150,6 +150,14 @@ def numero(valor):
         return None
 
 
+def coordenada(valor):
+    try:
+        v = float(str(valor).replace(",", "."))
+        return v if v else None
+    except (TypeError, ValueError):
+        return None
+
+
 def leer_csv(zf, sufijo):
     """Lee el CSV (separado por '|') cuyo nombre termina en `sufijo` dentro de un zip."""
     nombre = next((n for n in zf.namelist() if n.lower().endswith(sufijo)), None)
@@ -210,11 +218,7 @@ def procesar_comercio(zf, sucursales, productos):
     comercios = {(c["id_comercio"], c["id_bandera"]): c for c in leer_csv(zf, "comercio.csv")}
     locales = {}
     for s in leer_csv(zf, "sucursales.csv"):
-        lat, lon = numero(s.get("sucursales_latitud")), s.get("sucursales_longitud")
-        try:
-            lon = float(lon)
-        except ValueError:
-            lon = None
+        lat, lon = coordenada(s.get("sucursales_latitud")), coordenada(s.get("sucursales_longitud"))
         cerca = lat is not None and lon is not None and distancia_km(lat, lon, *MADRYN) <= RADIO_KM
         com = comercios.get((s["id_comercio"], s["id_bandera"]), {})
         cadena = cadena_de(com)
@@ -229,6 +233,8 @@ def procesar_comercio(zf, sucursales, productos):
                 "direccion": f'{s.get("sucursales_calle", "").title()} {s.get("sucursales_numero", "")}'.strip(),
                 "lat": lat, "lon": lon,
                 "actualizado": com.get("comercio_ultima_actualizacion", ""),
+                "horarios": {d: s.get(f"sucursales_{d}_horario_atencion", "").strip()
+                             for d in ("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")},
             }
     if not locales:
         return
