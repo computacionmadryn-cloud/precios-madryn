@@ -36,7 +36,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .nav { background: var(--amarillo); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; box-shadow: 0 1px 0 rgba(0,0,0,.1); }
 .nav-row { display: flex; align-items: center; gap: 16px 24px; padding-block: 10px 6px; flex-wrap: wrap; }
 .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: #2d3277; font-weight: 700; font-size: 20px; letter-spacing: -.01em; white-space: nowrap; }
-.logo svg { flex: none; }
+.logo img { flex: none; height: 60px; width: auto; border-radius: 6px; object-fit: cover; }
 .buscar { flex: 1 1 380px; display: flex; min-width: 0; background: var(--surface); border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 .buscar input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: var(--ink); padding: 10px 14px; outline: none; }
 .buscar button { border: 0; border-left: 1px solid var(--line); background: transparent; padding: 0 14px; cursor: pointer; color: var(--muted); display: flex; align-items: center; }
@@ -116,7 +116,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   <div class="gutter"><div class="wrap">
     <div class="nav-row">
       <a class="logo" href="#">
-        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="17" fill="#2d3277"/><path d="M9 11h2.2l2.1 9.2h9.3l1.9-6.6H13" fill="none" stroke="#fff159" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14.5" cy="24" r="1.6" fill="#fff159"/><circle cx="21.5" cy="24" r="1.6" fill="#fff159"/></svg>
+        <img src="logo.webp" width="48" height="60" alt="">
         Precios Madryn
       </a>
       <form class="buscar" role="search" onsubmit="return false">
