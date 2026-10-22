@@ -136,9 +136,20 @@ def leer_csv(zf, sufijo):
     return filas
 
 
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+    "Accept": "application/json,text/html,*/*",
+    "Accept-Language": "es-AR,es;q=0.9",
+}
+
+
+def abrir(url, timeout=60):
+    return urllib.request.urlopen(urllib.request.Request(url, headers=HEADERS), timeout=timeout)
+
+
 def descargar_ultimo_zip(destino):
     print("Consultando el portal de datos abiertos…")
-    with urllib.request.urlopen(CKAN, timeout=60) as r:
+    with abrir(CKAN) as r:
         paquete = json.load(r)["result"]
     recursos = [x for x in paquete["resources"] if x.get("url", "").lower().endswith(".zip")]
     recursos.sort(key=lambda x: x.get("last_modified") or x.get("created") or "", reverse=True)
@@ -146,7 +157,9 @@ def descargar_ultimo_zip(destino):
         sys.exit("No encontré archivos .zip en el dataset SEPA.")
     url = recursos[0]["url"]
     print(f"Descargando {url} (puede pesar varios cientos de MB)…")
-    urllib.request.urlretrieve(url, destino)
+    with abrir(url, timeout=600) as r, open(destino, "wb") as f:
+        while bloque := r.read(1 << 20):
+            f.write(bloque)
     return destino
 
 
