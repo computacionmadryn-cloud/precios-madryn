@@ -6,127 +6,144 @@
 <title>Precios Madryn</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap">
 <style>
-/* Layout: barra de búsqueda fija arriba, lista de productos con precios por cadena, y "Mi changuito" como panel lateral (abajo en celular). */
+/* Estilo marketplace: franja amarilla con buscador, fondo gris, productos en tarjetas blancas con el precio grande. */
 :root {
-  --bg: #f4f7f7;
+  --amarillo: #fff159;
+  --bg: #ededed;
   --surface: #ffffff;
-  --ink: #12302f;
-  --muted: #5b7271;
-  --line: #d7e2e1;
-  --accent: #0b6b70;
-  --accent-soft: #dff0ef;
-  --best: #1d7a3e;
-  --best-soft: #e2f4e7;
-  --warn-soft: #fff4d6;
-  --warn-ink: #6b4d00;
-  --f-display: "Noto Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ink: #333333;
+  --muted: #737373;
+  --line: #e6e6e6;
+  --azul: #3483fa;
+  --azul-hover: #2968c8;
+  --azul-soft: #e3edfb;
+  --verde: #00a650;
+  --verde-soft: #e5f6ed;
+  --naranja: #ff7733;
   --f-body: "Noto Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0d1a1a; --surface: #142525; --ink: #e3efee; --muted: #93abaa; --line: #24403f;
-    --accent: #5cc3c4; --accent-soft: #173a3a; --best: #6fd690; --best-soft: #173a25;
-    --warn-soft: #3a3014; --warn-ink: #f2d58a; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0d1a1a; --surface: #142525; --ink: #e3efee; --muted: #93abaa; --line: #24403f;
-  --accent: #5cc3c4; --accent-soft: #173a3a; --best: #6fd690; --best-soft: #173a25;
-  --warn-soft: #3a3014; --warn-ink: #f2d58a; color-scheme: dark;
-}
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body {
-  background: var(--bg); color: var(--ink); font: 16px/1.45 var(--f-body);
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 0 48px;
+body { background: var(--bg); color: var(--ink); font: 15px/1.4 var(--f-body); padding-block: 0 40px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--amarillo); }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1200px; margin: 0 auto; }
+
+/* Franja amarilla */
+.nav { background: var(--amarillo); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; box-shadow: 0 1px 0 rgba(0,0,0,.1); }
+.nav-row { display: flex; align-items: center; gap: 16px 24px; padding-block: 10px 6px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: #2d3277; font-weight: 700; font-size: 20px; letter-spacing: -.01em; white-space: nowrap; }
+.logo svg { flex: none; }
+.buscar { flex: 1 1 380px; display: flex; min-width: 0; background: var(--surface); border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.buscar input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: var(--ink); padding: 10px 14px; outline: none; }
+.buscar button { border: 0; border-left: 1px solid var(--line); background: transparent; padding: 0 14px; cursor: pointer; color: var(--muted); display: flex; align-items: center; }
+.ir-carrito { display: flex; align-items: center; gap: 6px; color: var(--ink); text-decoration: none; font-size: 14px; white-space: nowrap; }
+.ir-carrito b { background: var(--azul); color: #fff; border-radius: 10px; font-size: 12px; padding: 0 6px; min-width: 20px; text-align: center; }
+.cats { display: flex; gap: 4px 18px; overflow-x: auto; padding-block: 2px 8px; scrollbar-width: none; }
+.cats::-webkit-scrollbar { display: none; }
+.chip { flex: none; border: 0; background: none; font: inherit; font-size: 14px; color: rgba(0,0,0,.6); padding: 2px 0; cursor: pointer; border-bottom: 2px solid transparent; }
+.chip:hover { color: var(--ink); }
+.chip[aria-pressed="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
+
+/* Barra de resultados */
+.aviso { background: #fff8e1; color: #6b4d00; border-radius: 6px; padding: 10px 14px; font-size: 14px; margin: 16px 0 0; }
+.cabecera { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; margin: 20px 0 12px; }
+.cabecera h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
+.cabecera .meta { color: var(--muted); font-size: 13px; }
+.orden { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+.orden select { font: inherit; color: var(--ink); background: transparent; border: 0; font-weight: 600; cursor: pointer; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.resumen { color: var(--muted); font-size: 13px; margin: 0 0 10px; }
+.lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+@media (max-width: 480px) {
+  .lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .prod { padding: 12px; }
+  .precio-grande .val { font-size: 20px; }
+  .nav { position: static; }
+  .logo { flex: 1; }
+  .buscar { order: 3; flex-basis: 100%; }
 }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-.wrap { max-width: 1180px; margin: 0 auto; }
-header.top { padding-block: 28px 12px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; }
-h1 { font: 700 clamp(28px, 5vw, 40px)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
-h1 span { color: var(--accent); }
-.sub { color: var(--muted); margin: 4px 0 0; max-width: 60ch; }
-.meta { color: var(--muted); font-size: 14px; }
-.aviso { background: var(--warn-soft); color: var(--warn-ink); border-radius: 8px; padding: 10px 14px; font-size: 15px; margin-block: 8px; }
-.aviso[hidden] { display: none; }
-.barra { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px; display: grid; gap: 10px; }
-.buscar { display: flex; gap: 8px; flex-wrap: wrap; }
-.buscar input, .buscar select {
-  font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
-  border-radius: 10px; padding: 11px 14px; min-width: 0;
-}
-.buscar input { flex: 1 1 260px; font-size: 17px; }
-.buscar select { flex: 0 1 220px; }
-input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
-.chip { flex: none; font: 600 14px var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
-.grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
-@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } .carrito { order: -1; } }
-.resumen { color: var(--muted); font-size: 14px; margin: 4px 0 10px; }
-.lista { display: grid; gap: 10px; }
-.prod { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
-.prod-top { display: flex; gap: 12px; justify-content: space-between; align-items: start; }
-.prod-nombre { font-weight: 700; font-size: 17px; line-height: 1.25; min-width: 0; overflow-wrap: anywhere; }
-.prod-info { color: var(--muted); font-size: 14px; }
-.tag { display: inline-block; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 1px 6px; margin-right: 6px; }
-.btn-add { flex: none; font: 700 14px var(--f-body); border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
-.btn-add.en { background: var(--accent); color: var(--surface); }
-.precios { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
-.precio { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-variant-numeric: tabular-nums; }
-.precio .cad { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.precio .val { font-weight: 700; font-size: 18px; }
-.precio .lst { font-size: 13px; color: var(--muted); text-decoration: line-through; margin-left: 4px; font-weight: 400; }
-.precio .promo { font-size: 12px; color: var(--warn-ink); }
-.precio.mejor { border-color: var(--best); background: var(--best-soft); }
-.precio.mejor .val { color: var(--best); }
-.precio .best-lbl { font-size: 12px; font-weight: 700; color: var(--best); }
-.ahorro { font-size: 14px; color: var(--muted); }
-.mas { justify-self: center; font: 600 15px var(--f-body); background: var(--surface); color: var(--accent); border: 1px solid var(--line); border-radius: 10px; padding: 10px 18px; cursor: pointer; }
-.vacio { color: var(--muted); padding: 24px 0; }
-.carrito { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 150px); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; }
+
+/* Tarjeta de producto */
+.prod { background: var(--surface); border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.12); padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: box-shadow .15s; min-width: 0; }
+.prod:hover { box-shadow: 0 7px 16px rgba(0,0,0,.15); }
+.prod-cat { font-size: 12px; color: var(--muted); }
+.prod-nombre { font-size: 14px; font-weight: 400; line-height: 1.3; color: var(--ink); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
+.prod-info { font-size: 12px; color: var(--muted); }
+.antes { font-size: 13px; color: var(--muted); text-decoration: line-through; font-variant-numeric: tabular-nums; min-height: 1.2em; }
+.precio-grande { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.precio-grande .val { font-size: 26px; font-weight: 300; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.precio-grande .off { color: var(--verde); font-size: 14px; font-weight: 600; }
+.donde { font-size: 13px; color: var(--verde); font-weight: 600; }
+.donde.solo { color: var(--muted); font-weight: 400; }
+.otros { list-style: none; margin: 4px 0 0; padding: 8px 0 0; border-top: 1px solid var(--line); display: grid; gap: 3px; font-size: 13px; }
+.otros li { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; }
+.otros li span:first-child { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.otros .promo { color: var(--naranja); font-size: 11px; margin-left: 4px; }
+.btn-add { margin-top: auto; font: 600 14px var(--f-body); border: 0; border-radius: 6px; padding: 10px; cursor: pointer; background: var(--azul-soft); color: var(--azul); }
+.btn-add:hover { background: #d0e2fb; }
+.btn-add.en { background: var(--azul); color: #fff; }
+.mas { grid-column: 1 / -1; justify-self: center; font: 600 14px var(--f-body); background: var(--azul); color: #fff; border: 0; border-radius: 6px; padding: 12px 24px; cursor: pointer; }
+.mas:hover, .btn-add.en:hover { background: var(--azul-hover); }
+.vacio { grid-column: 1 / -1; background: var(--surface); border-radius: 6px; padding: 32px; text-align: center; color: var(--muted); }
+
+/* Changuito */
+.carrito { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 110px); background: var(--surface); border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.12); padding: 16px; display: grid; gap: 12px; }
 @media (max-width: 900px) { .carrito { position: static; } }
-.carrito h2 { font: 700 20px var(--f-display); margin: 0; }
+.carrito h2 { font-size: 18px; font-weight: 600; margin: 0; }
 .carrito .items { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
-.item { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.item { display: flex; gap: 8px; align-items: center; font-size: 13px; }
 .item span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.item button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; }
-.totales { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px; }
-.total { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; padding: 6px 8px; border-radius: 6px; }
-.total.mejor { background: var(--best-soft); color: var(--best); font-weight: 700; }
+.item button { border: 0; background: none; color: var(--azul); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; }
+.totales { display: grid; gap: 4px; border-top: 1px solid var(--line); padding-top: 10px; }
+.total { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; padding: 8px; border-radius: 6px; font-size: 14px; }
+.total.mejor { background: var(--verde-soft); color: var(--verde); font-weight: 700; }
 .total small { color: var(--muted); font-weight: 400; }
-.nota { font-size: 13px; color: var(--muted); margin: 0; }
-footer { margin-top: 32px; color: var(--muted); font-size: 14px; max-width: 70ch; }
-footer a { color: var(--accent); }
-@media (prefers-reduced-motion: no-preference) { .prod { transition: border-color .15s; } .prod:hover { border-color: var(--accent); } }
+.nota { font-size: 12px; color: var(--muted); margin: 0; }
+footer { margin-top: 32px; color: var(--muted); font-size: 12px; max-width: 80ch; }
+footer a { color: var(--azul); }
+input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .prod { transition: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <div>
-      <h1>Precios <span>Madryn</span></h1>
-      <p class="sub">Compará lo que cuesta cada producto en los supermercados de Puerto Madryn y armá tu changuito en el más barato.</p>
+<header class="nav">
+  <div class="gutter"><div class="wrap">
+    <div class="nav-row">
+      <a class="logo" href="#">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="17" fill="#2d3277"/><path d="M9 11h2.2l2.1 9.2h9.3l1.9-6.6H13" fill="none" stroke="#fff159" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14.5" cy="24" r="1.6" fill="#fff159"/><circle cx="21.5" cy="24" r="1.6" fill="#fff159"/></svg>
+        Precios Madryn
+      </a>
+      <form class="buscar" role="search" onsubmit="return false">
+        <input id="q" type="search" placeholder="Buscar productos, marcas y más…" aria-label="Buscar producto" autocomplete="off">
+        <button type="submit" aria-label="Buscar"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </form>
+      <a class="ir-carrito" href="#t-carrito"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="17" cy="19" r="1.5" fill="currentColor"/></svg>Mi changuito <b id="cuenta">0</b></a>
     </div>
-    <div class="meta" id="meta">Cargando precios…</div>
-  </header>
+    <nav class="cats" id="cats" aria-label="Categorías"></nav>
+  </div></div>
+</header>
+
+<div class="gutter"><div class="wrap">
   <p class="aviso" id="aviso" hidden>Estás viendo <strong>datos de ejemplo</strong> inventados para probar la página. Los precios reales se cargan cuando se ejecuta el actualizador con la base oficial SEPA.</p>
 
-  <div class="barra">
-    <div class="buscar">
-      <input id="q" type="search" placeholder="Buscá un producto: leche, yerba, fideos…" aria-label="Buscar producto" autocomplete="off">
-      <select id="orden" aria-label="Ordenar">
-        <option value="nombre">Ordenar por nombre</option>
-        <option value="barato">Menor precio primero</option>
-        <option value="ahorro">Mayor diferencia entre súper</option>
-      </select>
+  <div class="cabecera">
+    <div>
+      <h1>Supermercados de Puerto Madryn</h1>
+      <div class="meta" id="meta">Cargando precios…</div>
     </div>
-    <div class="chips" id="cats" role="group" aria-label="Categorías"></div>
+    <label class="orden">Ordenar por
+      <select id="orden">
+        <option value="nombre">Nombre</option>
+        <option value="barato">Menor precio</option>
+        <option value="ahorro">Mayor diferencia</option>
+      </select>
+    </label>
   </div>
 
   <div class="grid">
@@ -147,7 +164,7 @@ footer a { color: var(--accent); }
     la base oficial donde los supermercados informan sus precios todos los días. Se muestra el precio más bajo de cada cadena entre sus sucursales de Puerto Madryn.
     Los precios pueden cambiar en góndola; verificá antes de comprar.
   </footer>
-</div>
+</div></div>
 
 <script id="datos-ejemplo" type="application/json">{"generado":"2026-10-22T19:28+00:00","fuente":"Datos de ejemplo (inventados)","ejemplo":true,"sucursales":[{"id":"11-2-501","cadena":"Carrefour","nombre":"Carrefour Market Madryn","direccion":"28 De Julio 136","lat":null,"lon":-65.035,"actualizado":"2026-10-21 08:00:00"},{"id":"16-1-300","cadena":"ChangoMás","nombre":"Changomas Madryn","direccion":"Av. Roca 2000","lat":null,"lon":-65.05,"actualizado":"2026-10-21 08:00:00"},{"id":"10-1-14","cadena":"La Anónima","nombre":"La Anonima Centro","direccion":"25 De Mayo 301","lat":null,"lon":-65.036,"actualizado":"2026-10-21 08:00:00"},{"id":"10-1-45","cadena":"La Anónima","nombre":"La Anonima Sur","direccion":"Av. Gales 1200","lat":null,"lon":-65.045,"actualizado":"2026-10-21 08:00:00"},{"id":"15-3-88","cadena":"Vea","nombre":"Vea Madryn","direccion":"Av. Juan B. Justo 500","lat":null,"lon":-65.04,"actualizado":"2026-10-21 08:00:00"}],"productos":[{"id":"7790387000046","nombre":"Aceite de Girasol Natura 1.5 L","marca":"Natura","presentacion":"1.5 lt","categoria":"Almacén","ean":true,"precios":{"10-1-45":[3773.05],"11-2-501":[4253.14],"16-1-300":[3817.44]}},{"id":"7790742656003","nombre":"Agua Mineral Villavicencio 2 L","marca":"Villavicencio","presentacion":"2 lt","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[1315.6],"10-1-45":[1174.53],"11-2-501":[1393.28],"15-3-88":[1431.11],"16-1-300":[1139.57]}},{"id":"7790040930124","nombre":"Alfajor Triple Chocolate","marca":"Guaymallen","presentacion":"1 un","categoria":"Panadería y galletitas","ean":true,"precios":{"10-1-14":[650.55],"10-1-45":[572.51,458.01],"11-2-501":[707.48],"15-3-88":[695.65,556.52],"16-1-300":[576.23]}},{"id":"7790150070125","nombre":"Arroz Largo Fino Gallo 1 Kg","marca":"Gallo","presentacion":"1 kg","categoria":"Almacén","ean":true,"precios":{"10-1-14":[2112.11],"10-1-45":[1903.51],"11-2-501":[2272.9],"15-3-88":[2465.66],"16-1-300":[1950.98]}},{"id":"7790580122224","nombre":"Azucar Ledesma 1 Kg","marca":"Ledesma","presentacion":"1 kg","categoria":"Desayuno","ean":true,"precios":{"10-1-45":[1273.73],"11-2-501":[1715.69],"15-3-88":[1535.48],"16-1-300":[1364.41]}},{"id":"7791813421696","nombre":"Cafe Instantaneo La Virginia 170 g","marca":"La Virginia","presentacion":"170 gr","categoria":"Desayuno","ean":true,"precios":{"10-1-14":[6373.48,5098.78],"10-1-45":[5948.59,4758.87],"11-2-501":[7030.49,5624.39],"15-3-88":[7137.86]}},{"id":"7790250012019","nombre":"Cerveza Quilmes Lata 473 cc","marca":"Quilmes","presentacion":"473 cc","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[1743.22],"10-1-45":[1512.64],"15-3-88":[1984.73],"16-1-300":[1636.19]}},{"id":"7790070411716","nombre":"Dulce de Leche Clasico 400 g","marca":"La Serenisima","presentacion":"400 gr","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[2316.38],"10-1-45":[2125.88],"15-3-88":[2464.13],"16-1-300":[2205.9]}},{"id":"7792180001665","nombre":"Fideos Spaghetti Matarazzo 500 g","marca":"Matarazzo","presentacion":"500 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[1646.79,1317.43],"10-1-45":[1556.37],"15-3-88":[1771.08],"16-1-300":[1542.31,1233.85]}},{"id":"7790040613102","nombre":"Galletitas Criollitas 300 g","marca":"Bagley","presentacion":"300 gr","categoria":"Panadería y galletitas","ean":true,"precios":{"10-1-45":[1323.99,1059.19],"11-2-501":[1727.29,1381.83],"15-3-88":[1695.49]}},{"id":"7790895000997","nombre":"Gaseosa Coca-Cola 2.25 L","marca":"Coca-Cola","presentacion":"2.25 lt","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[3327.26],"15-3-88":[3664.37,2931.5],"16-1-300":[3084.9]}},{"id":"7790310981120","nombre":"Harina 000 Blancaflor 1 Kg","marca":"Blancaflor","presentacion":"1 kg","categoria":"Almacén","ean":true,"precios":{"10-1-14":[1207.5,966.0],"11-2-501":[1394.41],"15-3-88":[1388.99],"16-1-300":[1150.95,920.76]}},{"id":"7790070012050","nombre":"Leche Entera La Serenisima 1 L","marca":"La Serenisima","presentacion":"1 lt","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[1361.52,1089.22],"10-1-45":[1279.51],"11-2-501":[1602.03],"15-3-88":[1566.78],"16-1-300":[1188.39]}},{"id":"7790070507051","nombre":"Manteca 200 g","marca":"La Serenisima","presentacion":"200 gr","categoria":"Lácteos","ean":true,"precios":{"10-1-45":[2351.53],"15-3-88":[2921.49],"16-1-300":[2473.49]}},{"id":"7794000960107","nombre":"Mayonesa Hellmanns 475 g","marca":"Hellmanns","presentacion":"475 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[2723.97,2179.18],"10-1-45":[2780.05],"11-2-501":[3202.69],"15-3-88":[3345.79]}},{"id":"10-PROP10","nombre":"Pan Frances Por Kg","marca":"La Anonima","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"10-1-14":[2452.4],"10-1-45":[2274.5]}},{"id":"11-PROP11","nombre":"Pan Frances Por Kg","marca":"Carrefour Market","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"11-2-501":[2812.21]}},{"id":"15-PROP15","nombre":"Pan Frances Por Kg","marca":"Vea","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"15-3-88":[2757.19]}},{"id":"16-PROP16","nombre":"Pan Frances Por Kg","marca":"Changomas","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"16-1-300":[2295.34]}},{"id":"7790670051345","nombre":"Pure de Tomate Arcor 520 g","marca":"Arcor","presentacion":"520 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[851.23],"10-1-45":[845.73],"11-2-501":[1055.56],"15-3-88":[944.66],"16-1-300":[827.18,661.74]}},{"id":"7792900000016","nombre":"Queso Cremoso Por Kg","marca":"La Paulina","presentacion":"1 kg","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[9308.05],"10-1-45":[9193.74,7354.99],"11-2-501":[10908.76],"15-3-88":[10950.76],"16-1-300":[9232.87]}},{"id":"7790580660009","nombre":"Yerba Mate Playadito 1 Kg","marca":"Playadito","presentacion":"1 kg","categoria":"Desayuno","ean":true,"precios":{"10-1-14":[5069.78,4055.82],"10-1-45":[4672.54],"11-2-501":[5836.98,4669.58],"15-3-88":[5957.39],"16-1-300":[5049.52,4039.62]}},{"id":"7790070318114","nombre":"Yogur Bebible Frutilla 1 Kg","marca":"La Serenisima","presentacion":"1 kg","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[2434.44],"10-1-45":[2411.82],"11-2-501":[2800.31,2240.25],"15-3-88":[2846.46,2277.17],"16-1-300":[2456.93,1965.54]}}]}</script>
 <script>
@@ -203,27 +220,23 @@ footer a { color: var(--accent); }
 
   function tarjeta(p) {
     const multi = Object.keys(p.porCadena).length > 1;
-    const precios = cadenas.filter((c) => p.porCadena[c]).map((c) => {
+    const orden = cadenas.filter((c) => p.porCadena[c]).sort((a, b) => p.porCadena[a].final - p.porCadena[b].final);
+    const best = p.porCadena[orden[0]];
+    const off = best.promo ? Math.round((1 - best.final / best.lista) * 100) : 0;
+    const otros = orden.slice(1).map((c) => {
       const x = p.porCadena[c];
-      const mejor = multi && x.final === p.min;
-      return `<div class="precio${mejor ? " mejor" : ""}" title="${esc(x.suc)}">
-        <div class="cad">${esc(c)}</div>
-        <div class="val">${fmt.format(x.final)}${x.promo ? `<span class="lst">${fmt.format(x.lista)}</span>` : ""}</div>
-        ${x.promo ? `<div class="promo">con promoción</div>` : ""}
-        ${mejor ? `<div class="best-lbl">Más barato</div>` : ""}
-      </div>`;
+      return `<li title="${esc(x.suc)}"><span>${esc(c)}${x.promo ? `<span class="promo">promo</span>` : ""}</span><span>${fmt.format(x.final)}</span></li>`;
     }).join("");
     const en = carrito.has(p.id);
     return `<article class="prod">
-      <div class="prod-top">
-        <div>
-          <div class="prod-nombre">${esc(p.nombre)}</div>
-          <div class="prod-info"><span class="tag">${esc(p.categoria)}</span>${esc(p.marca)}${p.presentacion ? " · " + esc(p.presentacion) : ""}</div>
-        </div>
-        <button class="btn-add${en ? " en" : ""}" type="button" data-id="${esc(p.id)}" aria-pressed="${en}">${en ? "En el changuito" : "+ Agregar"}</button>
-      </div>
-      <div class="precios">${precios}</div>
-      ${multi && p.dif > 0 ? `<div class="ahorro">Diferencia entre el más caro y el más barato: <strong>${fmt.format(p.max - p.min)}</strong> (${Math.round(p.dif * 100)}%)</div>` : ""}
+      <div class="prod-cat">${esc(p.categoria)}</div>
+      <div class="prod-nombre" title="${esc(p.nombre)}">${esc(p.nombre)}</div>
+      <div class="prod-info">${esc(p.marca)}${p.presentacion ? " · " + esc(p.presentacion) : ""}</div>
+      <div class="antes">${best.promo ? fmt.format(best.lista) : ""}</div>
+      <div class="precio-grande"><span class="val">${fmt.format(best.final)}</span>${off > 0 ? `<span class="off">${off}% OFF</span>` : ""}</div>
+      <div class="donde${multi ? "" : " solo"}">${multi ? "Más barato en " : "Solo en "}${esc(orden[0])}</div>
+      ${otros ? `<ul class="otros">${otros}</ul>` : ""}
+      <button class="btn-add${en ? " en" : ""}" type="button" data-id="${esc(p.id)}" aria-pressed="${en}">${en ? "✓ En el changuito" : "Agregar al changuito"}</button>
     </article>`;
   }
 
@@ -237,8 +250,9 @@ footer a { color: var(--accent); }
 
   function renderCarrito() {
     const items = productos.filter((p) => carrito.has(p.id));
+    $("cuenta").textContent = items.length;
     if (!items.length) {
-      $("items").innerHTML = `<p class="nota">Todavía no agregaste productos. Tocá "+ Agregar" en los que comprás seguido y te mostramos en qué súper te sale más barato todo junto.</p>`;
+      $("items").innerHTML = `<p class="nota">Todavía no agregaste productos. Tocá "Agregar al changuito" en los que comprás seguido y te mostramos en qué súper te sale más barato todo junto.</p>`;
       $("totales").innerHTML = ""; return;
     }
     $("items").innerHTML = items.map((p) => `<div class="item"><span>${esc(p.nombre)}</span><button type="button" data-quitar="${esc(p.id)}" aria-label="Quitar ${esc(p.nombre)}">×</button></div>`).join("");
