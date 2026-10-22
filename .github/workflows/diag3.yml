@@ -1,0 +1,10 @@
+name: Diag contador
+on: workflow_dispatch
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for u in "https://api.counterapi.dev/v1/precios-madryn-test/visitas" "https://api.counterapi.dev/v1/precios-madryn-test/visitas/up" "https://hits.sh/computacionmadryn-cloud.github.io/precios-madryn-test.svg" "https://api.countapi.xyz/hit/precios-madryn-test/visitas"; do
+            echo "== $u"; curl -sS -m 20 -D - "$u" -o /tmp/r | grep -i "^HTTP\|access-control-allow-origin"; head -c 300 /tmp/r; echo
+          done
