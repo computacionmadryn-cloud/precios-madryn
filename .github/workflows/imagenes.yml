@@ -1,0 +1,36 @@
+name: Buscar imágenes
+
+# Las fotos sí se pueden buscar desde los servidores de GitHub (a diferencia de los precios),
+# así que esto corre solo todos los días y busca las fotos de los productos nuevos.
+on:
+  schedule:
+    - cron: "0 15 * * *"   # 12:00 de Argentina, después de la actualización de precios
+  workflow_dispatch:
+    inputs:
+      minutos:
+        description: "Minutos máximos de búsqueda"
+        default: "45"
+
+permissions:
+  contents: write
+
+concurrency: imagenes
+
+jobs:
+  imagenes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python buscar_imagenes.py --minutos "${{ github.event.inputs.minutos || '45' }}"
+      - name: Guardar cambios
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data/imagenes.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Imágenes actualizadas $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 5; done
