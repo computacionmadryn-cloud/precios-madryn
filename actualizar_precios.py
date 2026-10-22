@@ -54,15 +54,37 @@ NO_COMESTIBLES = [
     "hisopo", "preservativo", "quitaesmalte", "talco", "gel fijador", "cotonete", "trapo",
     "rejilla", "escoba", "balde", "film", "papel aluminio", "vela", "carbon", "lavavajilla",
     "jabon en polvo", "quitamanchas", "apresto", "blanqueador", "repelente", "colonia", "perfume",
+    # perfumería y limpieza (también abreviado, como viene en el SEPA)
+    "jab ", "sh ", "acond", "desod", "deo ", "antitransp", "suaviz", "enjuague", "esmalte", "nivea", "dove",
+    "rexona", "sedal", "elvive", "tresemme", "pantene", "colgate", "plusbelle", "glade", "poett", "air wick",
+    "aromatizador", "difusor", "repuesto", "papel", "multiuso", "lustra", "biberon", "mordillo", "chupete",
+]
+
+# Ropa, bazar, juguetería, librería y electro. Son palabras que también aparecen en comida
+# ("fideos cinta", "sopa en vaso"), así que solo descartan si el producto no parece comida
+# o si el nombre empieza con ellas ("VASO CERVEZA 500 ML").
+NO_COMESTIBLES_DEBILES = [
+    "remera", "campera", "pantalon", "calza", "short", "boxer", "bombacha", "corpino", "sandalia", "ojota",
+    "zapatilla", "pijama", "buzo", "jogger", "bermuda", "chaleco", "medias ", "soquete", "jean", "vaso",
+    "plato", "bowl", "mug", "taza", "sarten", "cacerola", "olla", "bandeja", "silla", "almohad", "sabana",
+    "toalla", "mantel", "valija", "mochila", "juguete", "muneca", "libro", "led ", "bulbo", "cinta", "pano",
+    "guante", "escobillon", "secador", "colador", "contenedor", "hermetico", "tempera", "folio", "cuaderno",
+    "lapiz", "birome", "boligrafo", "cargador", "auricular", "parlante", "termo", "botella termica",
+    "cesto", "jarra", "aire split", "ventilador", "estufa", "escalera", "bordeadora", "taladro", "anteojo",
+    "slime", "chinche", "banqueta", "cohete", "pelota", "juego de", "set de", "kit ", "gel ", "hair",
+    "loreal", "dermaglos", "corega", "cif ", "limp ", "comfort", "perfumante", "membrana", "trat ",
+    "crem hidr", "maquillaje", "labial", "rimel", "pinza", "tijera", "cuchillo", "tenedor", "cuchara",
 ]
 
 CATEGORIAS = [
-    ("Bebidas", ["gaseosa", "agua ", "agua mineral", "jugo", "cerveza", "vino", "fernet", "sidra",
-                 "soda", "aperitivo", "energizante", "isotonica", "whisky", "vodka", "gin ", "licor", "espumante"]),
     ("Lácteos", ["leche", "yogur", "queso", "manteca", "crema de leche", "dulce de leche", "postre",
-                 "flan", "ricota", "muzzarella", "mozzarella"]),
+                 "flan", "ricota", "muzzarella", "mozzarella", "parmes", "reggianito", "actimel", "danonino"]),
     ("Carnes y fiambres", ["carne", "pollo", "cerdo", "milanesa", "hamburguesa", "salchicha", "jamon",
-                           "salame", "mortadela", "paleta", "chorizo", "bondiola", "pescado", "merluza", "atun"]),
+                           "salame", "mortadela", "paleta", "chorizo", "bondiola", "pescado", "merluza", "atun",
+                           "bife", "asado", "nalga", "peceto", "vacio", "matambre", "costilla", "picada"]),
+    ("Bebidas", ["gaseosa", "agua ", "agua mineral", "jugo", "cerveza", "vino", "fernet", "sidra",
+                 "soda", "aperitivo", "energizante", "isotonica", "whisky", "vodka", "gin ", "licor", "espumante",
+                 "malbec", "cabernet", "tinto", "torrontes", "chardonnay", "champagne", "amargo", "ades ", "ginebra", "vermouth", "aperitivo"]),
     ("Panadería y galletitas", ["pan ", "pan de", "galletita", "bizcocho", "tostada", "budin", "alfajor",
                                 "magdalena", "grisin", "prepizza", "tapa de empanada", "tapas para"]),
     ("Desayuno", ["cafe", "yerba", "te ", "mate cocido", "cacao", "cereal", "azucar", "edulcorante",
@@ -70,7 +92,8 @@ CATEGORIAS = [
     ("Almacén", ["arroz", "fideo", "harina", "aceite", "vinagre", "sal ", "pure", "lenteja", "poroto",
                  "arveja", "garbanzo", "polenta", "mayonesa", "ketchup", "mostaza", "salsa", "caldo",
                  "sopa", "conserva", "enlatado", "choclo", "durazno en almibar", "gelatina", "bizcochuelo",
-                 "levadura", "especia", "oregano", "pimienta"]),
+                 "levadura", "especia", "oregano", "pimienta", "aceituna", "huevo", "pizza", "rebozador",
+                 "pickle", "condimento", "bicarbonato", "premezcla", "jardinera", "pate ", "semola", "semolin", "aceto", "maizena", "tomate triturado"]),
     ("Frutas y verduras", ["papa ", "tomate", "cebolla", "lechuga", "zanahoria", "manzana", "banana",
                            "naranja", "limon", "zapallo", "batata", "fruta", "verdura"]),
     ("Congelados", ["congelad", "helado", "papas fritas", "bastones", "nuggets", "patitas"]),
@@ -91,11 +114,16 @@ def patron(claves):
 
 
 RE_NO_COMESTIBLE = patron(NO_COMESTIBLES)
+RE_DEBIL = patron(NO_COMESTIBLES_DEBILES)
 RE_CATEGORIAS = [(cat, patron(claves)) for cat, claves in CATEGORIAS]
 
 
-def es_comestible(nombre):
-    return not RE_NO_COMESTIBLE.search(normalizar(nombre))
+def es_comestible(nombre, cat=None):
+    n = normalizar(nombre)
+    if RE_NO_COMESTIBLE.search(n):
+        return False
+    debil = RE_DEBIL.search(n)
+    return not (debil and (cat is None or debil.start() == 0))
 
 
 def categoria(nombre):
@@ -103,7 +131,7 @@ def categoria(nombre):
     for cat, regex in RE_CATEGORIAS:
         if regex.search(n):
             return cat
-    return "Otros alimentos"
+    return None
 
 
 def distancia_km(lat1, lon1, lat2, lon2):
@@ -206,7 +234,10 @@ def procesar_comercio(zf, sucursales, productos):
         return
     for p in leer_csv(zf, "productos.csv"):
         sid = locales.get((p["id_comercio"], p["id_bandera"], p["id_sucursal"]))
-        if not sid or not es_comestible(p.get("productos_descripcion")):
+        if not sid:
+            continue
+        cat = categoria(p.get("productos_descripcion"))
+        if not es_comestible(p.get("productos_descripcion"), cat):
             continue
         lista = numero(p.get("productos_precio_lista"))
         if lista is None:
@@ -216,12 +247,15 @@ def procesar_comercio(zf, sucursales, productos):
                   if x and x < lista and x > lista * 0.3]
         ean = p.get("productos_ean") == "1"
         pid = p["id_producto"] if ean else f'{p["id_comercio"]}-{p["id_producto"]}'
+        # Lo que se vende "por unidad" (EA/CU) y no parece comida suele ser bazar, ropa, juguetes, etc.
+        if cat is None and normalizar(p.get("productos_unidad_medida_presentacion")).strip(". ") in ("ea", "cu"):
+            continue
         prod = productos.setdefault(pid, {
             "id": pid,
             "nombre": p.get("productos_descripcion", "").strip(),
             "marca": p.get("productos_marca", "").title(),
             "presentacion": f'{p.get("productos_cantidad_presentacion", "")} {p.get("productos_unidad_medida_presentacion", "")}'.strip(),
-            "categoria": categoria(p.get("productos_descripcion")),
+            "categoria": cat or "Otros alimentos",
             "ean": ean,
             "precios": {},
         })
