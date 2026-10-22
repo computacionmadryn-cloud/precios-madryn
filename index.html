@@ -35,8 +35,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 /* Franja amarilla */
 .nav { background: var(--amarillo); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; box-shadow: 0 1px 0 rgba(0,0,0,.1); }
 .nav-row { display: flex; align-items: center; gap: 16px 24px; padding-block: 10px 6px; flex-wrap: wrap; }
-.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: #2d3277; font-weight: 700; font-size: 20px; letter-spacing: -.01em; white-space: nowrap; }
-.logo img { flex: none; height: 60px; width: auto; border-radius: 6px; object-fit: cover; }
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #2d3277; white-space: nowrap; }
+.logo img { flex: none; height: 100px; width: auto; border-radius: 8px; object-fit: cover; }
+.logo-txt { display: flex; flex-direction: column; line-height: 1.1; }
+.logo-nombre { font-size: 30px; font-weight: 700; letter-spacing: .01em; }
+.logo-sub { font-size: 17px; font-weight: 400; color: #333; margin-top: 2px; }
 .buscar { flex: 1 1 380px; display: flex; min-width: 0; background: var(--surface); border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 .buscar input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: var(--ink); padding: 10px 14px; outline: none; }
 .buscar button { border: 0; border-left: 1px solid var(--line); background: transparent; padding: 0 14px; cursor: pointer; color: var(--muted); display: flex; align-items: center; }
@@ -62,6 +65,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   .precio-grande .val { font-size: 20px; }
   .nav { position: static; }
   .logo { flex: 1; }
+  .logo img { height: 72px; }
+  .logo-nombre { font-size: 24px; }
+  .logo-sub { font-size: 15px; }
   .buscar { order: 3; flex-basis: 100%; }
 }
 
@@ -95,8 +101,8 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   <div class="gutter"><div class="wrap">
     <div class="nav-row">
       <a class="logo" href="#">
-        <img src="logo.webp" width="48" height="60" alt="">
-        Precios Madryn
+        <img src="logo.webp" width="80" height="100" alt="">
+        <span class="logo-txt"><span class="logo-nombre">PRECIOS MADRYN</span><span class="logo-sub">Buscador de precios</span></span>
       </a>
       <form class="buscar" role="search" onsubmit="return false">
         <input id="q" type="search" placeholder="Buscar productos, marcas y más…" aria-label="Buscar producto" autocomplete="off">
