@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Precios Madryn</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: barra de búsqueda fija arriba, lista de productos con precios por cadena, y "Mi changuito" como panel lateral (abajo en celular). */
+:root {
+  --bg: #f4f7f7;
+  --surface: #ffffff;
+  --ink: #12302f;
+  --muted: #5b7271;
+  --line: #d7e2e1;
+  --accent: #0b6b70;
+  --accent-soft: #dff0ef;
+  --best: #1d7a3e;
+  --best-soft: #e2f4e7;
+  --warn-soft: #fff4d6;
+  --warn-ink: #6b4d00;
+  --f-display: "Familjen Grotesk", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1a1a; --surface: #142525; --ink: #e3efee; --muted: #93abaa; --line: #24403f;
+    --accent: #5cc3c4; --accent-soft: #173a3a; --best: #6fd690; --best-soft: #173a25;
+    --warn-soft: #3a3014; --warn-ink: #f2d58a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1a1a; --surface: #142525; --ink: #e3efee; --muted: #93abaa; --line: #24403f;
+  --accent: #5cc3c4; --accent-soft: #173a3a; --best: #6fd690; --best-soft: #173a25;
+  --warn-soft: #3a3014; --warn-ink: #f2d58a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink); font: 16px/1.45 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1180px; margin: 0 auto; }
+header.top { padding-block: 28px 12px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; }
+h1 { font: 700 clamp(28px, 5vw, 40px)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h1 span { color: var(--accent); }
+.sub { color: var(--muted); margin: 4px 0 0; max-width: 60ch; }
+.meta { color: var(--muted); font-size: 14px; }
+.aviso { background: var(--warn-soft); color: var(--warn-ink); border-radius: 8px; padding: 10px 14px; font-size: 15px; margin-block: 8px; }
+.aviso[hidden] { display: none; }
+.barra { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px; display: grid; gap: 10px; }
+.buscar { display: flex; gap: 8px; flex-wrap: wrap; }
+.buscar input, .buscar select {
+  font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; padding: 11px 14px; min-width: 0;
+}
+.buscar input { flex: 1 1 260px; font-size: 17px; }
+.buscar select { flex: 0 1 220px; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.chip { flex: none; font: 600 14px var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } .carrito { order: -1; } }
+.resumen { color: var(--muted); font-size: 14px; margin: 4px 0 10px; }
+.lista { display: grid; gap: 10px; }
+.prod { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
+.prod-top { display: flex; gap: 12px; justify-content: space-between; align-items: start; }
+.prod-nombre { font-weight: 700; font-size: 17px; line-height: 1.25; min-width: 0; overflow-wrap: anywhere; }
+.prod-info { color: var(--muted); font-size: 14px; }
+.tag { display: inline-block; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 1px 6px; margin-right: 6px; }
+.btn-add { flex: none; font: 700 14px var(--f-body); border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.btn-add.en { background: var(--accent); color: var(--surface); }
+.precios { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.precio { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-variant-numeric: tabular-nums; }
+.precio .cad { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.precio .val { font-weight: 700; font-size: 18px; }
+.precio .lst { font-size: 13px; color: var(--muted); text-decoration: line-through; margin-left: 4px; font-weight: 400; }
+.precio .promo { font-size: 12px; color: var(--warn-ink); }
+.precio.mejor { border-color: var(--best); background: var(--best-soft); }
+.precio.mejor .val { color: var(--best); }
+.precio .best-lbl { font-size: 12px; font-weight: 700; color: var(--best); }
+.ahorro { font-size: 14px; color: var(--muted); }
+.mas { justify-self: center; font: 600 15px var(--f-body); background: var(--surface); color: var(--accent); border: 1px solid var(--line); border-radius: 10px; padding: 10px 18px; cursor: pointer; }
+.vacio { color: var(--muted); padding: 24px 0; }
+.carrito { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 150px); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; }
+@media (max-width: 900px) { .carrito { position: static; } }
+.carrito h2 { font: 700 20px var(--f-display); margin: 0; }
+.carrito .items { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
+.item { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.item span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.item button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; }
+.totales { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px; }
+.total { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; padding: 6px 8px; border-radius: 6px; }
+.total.mejor { background: var(--best-soft); color: var(--best); font-weight: 700; }
+.total small { color: var(--muted); font-weight: 400; }
+.nota { font-size: 13px; color: var(--muted); margin: 0; }
+footer { margin-top: 32px; color: var(--muted); font-size: 14px; max-width: 70ch; }
+footer a { color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) { .prod { transition: border-color .15s; } .prod:hover { border-color: var(--accent); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Precios <span>Madryn</span></h1>
+      <p class="sub">Compará lo que cuesta cada producto en los supermercados de Puerto Madryn y armá tu changuito en el más barato.</p>
+    </div>
+    <div class="meta" id="meta">Cargando precios…</div>
+  </header>
+  <p class="aviso" id="aviso" hidden>Estás viendo <strong>datos de ejemplo</strong> inventados para probar la página. Los precios reales se cargan cuando se ejecuta el actualizador con la base oficial SEPA.</p>
+
+  <div class="barra">
+    <div class="buscar">
+      <input id="q" type="search" placeholder="Buscá un producto: leche, yerba, fideos…" aria-label="Buscar producto" autocomplete="off">
+      <select id="orden" aria-label="Ordenar">
+        <option value="nombre">Ordenar por nombre</option>
+        <option value="barato">Menor precio primero</option>
+        <option value="ahorro">Mayor diferencia entre súper</option>
+      </select>
+    </div>
+    <div class="chips" id="cats" role="group" aria-label="Categorías"></div>
+  </div>
+
+  <div class="grid">
+    <main>
+      <p class="resumen" id="resumen"></p>
+      <div class="lista" id="lista"></div>
+    </main>
+    <aside class="carrito" aria-labelledby="t-carrito">
+      <h2 id="t-carrito">Mi changuito</h2>
+      <div class="items" id="items"></div>
+      <div class="totales" id="totales"></div>
+      <p class="nota">El total por súper suma solo los productos que ese súper tiene. Si le falta alguno, lo indica.</p>
+    </aside>
+  </div>
+
+  <footer>
+    Fuente: <a href="https://datos.produccion.gob.ar/dataset/sepa-precios" target="_blank" rel="noopener">Precios Claros – Base SEPA</a>,
+    la base oficial donde los supermercados informan sus precios todos los días. Se muestra el precio más bajo de cada cadena entre sus sucursales de Puerto Madryn.
+    Los precios pueden cambiar en góndola; verificá antes de comprar.
+  </footer>
+</div>
+
+<script id="datos-ejemplo" type="application/json">{"generado":"2026-10-22T19:28+00:00","fuente":"Datos de ejemplo (inventados)","ejemplo":true,"sucursales":[{"id":"11-2-501","cadena":"Carrefour","nombre":"Carrefour Market Madryn","direccion":"28 De Julio 136","lat":null,"lon":-65.035,"actualizado":"2026-10-21 08:00:00"},{"id":"16-1-300","cadena":"ChangoMás","nombre":"Changomas Madryn","direccion":"Av. Roca 2000","lat":null,"lon":-65.05,"actualizado":"2026-10-21 08:00:00"},{"id":"10-1-14","cadena":"La Anónima","nombre":"La Anonima Centro","direccion":"25 De Mayo 301","lat":null,"lon":-65.036,"actualizado":"2026-10-21 08:00:00"},{"id":"10-1-45","cadena":"La Anónima","nombre":"La Anonima Sur","direccion":"Av. Gales 1200","lat":null,"lon":-65.045,"actualizado":"2026-10-21 08:00:00"},{"id":"15-3-88","cadena":"Vea","nombre":"Vea Madryn","direccion":"Av. Juan B. Justo 500","lat":null,"lon":-65.04,"actualizado":"2026-10-21 08:00:00"}],"productos":[{"id":"7790387000046","nombre":"Aceite de Girasol Natura 1.5 L","marca":"Natura","presentacion":"1.5 lt","categoria":"Almacén","ean":true,"precios":{"10-1-45":[3773.05],"11-2-501":[4253.14],"16-1-300":[3817.44]}},{"id":"7790742656003","nombre":"Agua Mineral Villavicencio 2 L","marca":"Villavicencio","presentacion":"2 lt","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[1315.6],"10-1-45":[1174.53],"11-2-501":[1393.28],"15-3-88":[1431.11],"16-1-300":[1139.57]}},{"id":"7790040930124","nombre":"Alfajor Triple Chocolate","marca":"Guaymallen","presentacion":"1 un","categoria":"Panadería y galletitas","ean":true,"precios":{"10-1-14":[650.55],"10-1-45":[572.51,458.01],"11-2-501":[707.48],"15-3-88":[695.65,556.52],"16-1-300":[576.23]}},{"id":"7790150070125","nombre":"Arroz Largo Fino Gallo 1 Kg","marca":"Gallo","presentacion":"1 kg","categoria":"Almacén","ean":true,"precios":{"10-1-14":[2112.11],"10-1-45":[1903.51],"11-2-501":[2272.9],"15-3-88":[2465.66],"16-1-300":[1950.98]}},{"id":"7790580122224","nombre":"Azucar Ledesma 1 Kg","marca":"Ledesma","presentacion":"1 kg","categoria":"Desayuno","ean":true,"precios":{"10-1-45":[1273.73],"11-2-501":[1715.69],"15-3-88":[1535.48],"16-1-300":[1364.41]}},{"id":"7791813421696","nombre":"Cafe Instantaneo La Virginia 170 g","marca":"La Virginia","presentacion":"170 gr","categoria":"Desayuno","ean":true,"precios":{"10-1-14":[6373.48,5098.78],"10-1-45":[5948.59,4758.87],"11-2-501":[7030.49,5624.39],"15-3-88":[7137.86]}},{"id":"7790250012019","nombre":"Cerveza Quilmes Lata 473 cc","marca":"Quilmes","presentacion":"473 cc","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[1743.22],"10-1-45":[1512.64],"15-3-88":[1984.73],"16-1-300":[1636.19]}},{"id":"7790070411716","nombre":"Dulce de Leche Clasico 400 g","marca":"La Serenisima","presentacion":"400 gr","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[2316.38],"10-1-45":[2125.88],"15-3-88":[2464.13],"16-1-300":[2205.9]}},{"id":"7792180001665","nombre":"Fideos Spaghetti Matarazzo 500 g","marca":"Matarazzo","presentacion":"500 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[1646.79,1317.43],"10-1-45":[1556.37],"15-3-88":[1771.08],"16-1-300":[1542.31,1233.85]}},{"id":"7790040613102","nombre":"Galletitas Criollitas 300 g","marca":"Bagley","presentacion":"300 gr","categoria":"Panadería y galletitas","ean":true,"precios":{"10-1-45":[1323.99,1059.19],"11-2-501":[1727.29,1381.83],"15-3-88":[1695.49]}},{"id":"7790895000997","nombre":"Gaseosa Coca-Cola 2.25 L","marca":"Coca-Cola","presentacion":"2.25 lt","categoria":"Bebidas","ean":true,"precios":{"10-1-14":[3327.26],"15-3-88":[3664.37,2931.5],"16-1-300":[3084.9]}},{"id":"7790310981120","nombre":"Harina 000 Blancaflor 1 Kg","marca":"Blancaflor","presentacion":"1 kg","categoria":"Almacén","ean":true,"precios":{"10-1-14":[1207.5,966.0],"11-2-501":[1394.41],"15-3-88":[1388.99],"16-1-300":[1150.95,920.76]}},{"id":"7790070012050","nombre":"Leche Entera La Serenisima 1 L","marca":"La Serenisima","presentacion":"1 lt","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[1361.52,1089.22],"10-1-45":[1279.51],"11-2-501":[1602.03],"15-3-88":[1566.78],"16-1-300":[1188.39]}},{"id":"7790070507051","nombre":"Manteca 200 g","marca":"La Serenisima","presentacion":"200 gr","categoria":"Lácteos","ean":true,"precios":{"10-1-45":[2351.53],"15-3-88":[2921.49],"16-1-300":[2473.49]}},{"id":"7794000960107","nombre":"Mayonesa Hellmanns 475 g","marca":"Hellmanns","presentacion":"475 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[2723.97,2179.18],"10-1-45":[2780.05],"11-2-501":[3202.69],"15-3-88":[3345.79]}},{"id":"10-PROP10","nombre":"Pan Frances Por Kg","marca":"La Anonima","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"10-1-14":[2452.4],"10-1-45":[2274.5]}},{"id":"11-PROP11","nombre":"Pan Frances Por Kg","marca":"Carrefour Market","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"11-2-501":[2812.21]}},{"id":"15-PROP15","nombre":"Pan Frances Por Kg","marca":"Vea","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"15-3-88":[2757.19]}},{"id":"16-PROP16","nombre":"Pan Frances Por Kg","marca":"Changomas","presentacion":"1 kg","categoria":"Panadería y galletitas","ean":false,"precios":{"16-1-300":[2295.34]}},{"id":"7790670051345","nombre":"Pure de Tomate Arcor 520 g","marca":"Arcor","presentacion":"520 gr","categoria":"Almacén","ean":true,"precios":{"10-1-14":[851.23],"10-1-45":[845.73],"11-2-501":[1055.56],"15-3-88":[944.66],"16-1-300":[827.18,661.74]}},{"id":"7792900000016","nombre":"Queso Cremoso Por Kg","marca":"La Paulina","presentacion":"1 kg","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[9308.05],"10-1-45":[9193.74,7354.99],"11-2-501":[10908.76],"15-3-88":[10950.76],"16-1-300":[9232.87]}},{"id":"7790580660009","nombre":"Yerba Mate Playadito 1 Kg","marca":"Playadito","presentacion":"1 kg","categoria":"Desayuno","ean":true,"precios":{"10-1-14":[5069.78,4055.82],"10-1-45":[4672.54],"11-2-501":[5836.98,4669.58],"15-3-88":[5957.39],"16-1-300":[5049.52,4039.62]}},{"id":"7790070318114","nombre":"Yogur Bebible Frutilla 1 Kg","marca":"La Serenisima","presentacion":"1 kg","categoria":"Lácteos","ean":true,"precios":{"10-1-14":[2434.44],"10-1-45":[2411.82],"11-2-501":[2800.31,2240.25],"15-3-88":[2846.46,2277.17],"16-1-300":[2456.93,1965.54]}}]}</script>
+<script>
+(function () {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const fmt = new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
+  const PAGINA = 60;
+  let D = null, cadenas = [], productos = [], cat = "Todas", limite = PAGINA, carrito = new Set();
+
+  try { carrito = new Set(JSON.parse(localStorage.getItem("changuito") || "[]")); } catch (e) {}
+  const guardar = () => { try { localStorage.setItem("changuito", JSON.stringify([...carrito])); } catch (e) {} };
+  const norm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+  function preparar(datos) {
+    D = datos;
+    const porSucursal = {};
+    datos.sucursales.forEach((s) => { porSucursal[s.id] = s; });
+    cadenas = [...new Set(datos.sucursales.map((s) => s.cadena))].sort();
+    productos = datos.productos.map((p) => {
+      // Precio final por cadena = el más bajo (promo o lista) entre sus sucursales.
+      const porCadena = {};
+      for (const [sid, v] of Object.entries(p.precios)) {
+        const s = porSucursal[sid]; if (!s) continue;
+        const final = v.length > 1 ? v[1] : v[0];
+        const act = porCadena[s.cadena];
+        if (!act || final < act.final) porCadena[s.cadena] = { final, lista: v[0], promo: v.length > 1, suc: s.nombre };
+      }
+      const vals = Object.values(porCadena).map((x) => x.final);
+      const min = Math.min(...vals), max = Math.max(...vals);
+      return { ...p, porCadena, min, max, dif: vals.length > 1 ? (max - min) / min : 0, texto: norm(p.nombre + " " + p.marca) };
+    }).filter((p) => isFinite(p.min));
+
+    const cats = ["Todas", ...[...new Set(productos.map((p) => p.categoria))].sort()];
+    $("cats").innerHTML = cats.map((c) => `<button class="chip" type="button" aria-pressed="${c === cat}" data-cat="${c}">${c}</button>`).join("");
+    const fecha = new Date(datos.generado);
+    $("meta").textContent = `${productos.length.toLocaleString("es-AR")} productos · ${datos.sucursales.length} sucursales · actualizado ${fecha.toLocaleDateString("es-AR")}`;
+    $("aviso").hidden = !datos.ejemplo;
+    render(); renderCarrito();
+  }
+
+  function filtrados() {
+    const terms = norm($("q").value).split(/\s+/).filter(Boolean);
+    let r = productos.filter((p) => (cat === "Todas" || p.categoria === cat) && terms.every((t) => p.texto.includes(t)));
+    const o = $("orden").value;
+    if (o === "barato") r.sort((a, b) => a.min - b.min);
+    else if (o === "ahorro") r.sort((a, b) => b.dif - a.dif);
+    else r.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+    return r;
+  }
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function tarjeta(p) {
+    const multi = Object.keys(p.porCadena).length > 1;
+    const precios = cadenas.filter((c) => p.porCadena[c]).map((c) => {
+      const x = p.porCadena[c];
+      const mejor = multi && x.final === p.min;
+      return `<div class="precio${mejor ? " mejor" : ""}" title="${esc(x.suc)}">
+        <div class="cad">${esc(c)}</div>
+        <div class="val">${fmt.format(x.final)}${x.promo ? `<span class="lst">${fmt.format(x.lista)}</span>` : ""}</div>
+        ${x.promo ? `<div class="promo">con promoción</div>` : ""}
+        ${mejor ? `<div class="best-lbl">Más barato</div>` : ""}
+      </div>`;
+    }).join("");
+    const en = carrito.has(p.id);
+    return `<article class="prod">
+      <div class="prod-top">
+        <div>
+          <div class="prod-nombre">${esc(p.nombre)}</div>
+          <div class="prod-info"><span class="tag">${esc(p.categoria)}</span>${esc(p.marca)}${p.presentacion ? " · " + esc(p.presentacion) : ""}</div>
+        </div>
+        <button class="btn-add${en ? " en" : ""}" type="button" data-id="${esc(p.id)}" aria-pressed="${en}">${en ? "En el changuito" : "+ Agregar"}</button>
+      </div>
+      <div class="precios">${precios}</div>
+      ${multi && p.dif > 0 ? `<div class="ahorro">Diferencia entre el más caro y el más barato: <strong>${fmt.format(p.max - p.min)}</strong> (${Math.round(p.dif * 100)}%)</div>` : ""}
+    </article>`;
+  }
+
+  function render() {
+    const r = filtrados();
+    $("resumen").textContent = r.length ? `${r.length.toLocaleString("es-AR")} productos encontrados` : "";
+    $("lista").innerHTML = r.length
+      ? r.slice(0, limite).map(tarjeta).join("") + (r.length > limite ? `<button class="mas" id="mas" type="button">Ver más productos</button>` : "")
+      : `<p class="vacio">No encontramos productos con esa búsqueda. Probá con otra palabra o elegí "Todas".</p>`;
+  }
+
+  function renderCarrito() {
+    const items = productos.filter((p) => carrito.has(p.id));
+    if (!items.length) {
+      $("items").innerHTML = `<p class="nota">Todavía no agregaste productos. Tocá "+ Agregar" en los que comprás seguido y te mostramos en qué súper te sale más barato todo junto.</p>`;
+      $("totales").innerHTML = ""; return;
+    }
+    $("items").innerHTML = items.map((p) => `<div class="item"><span>${esc(p.nombre)}</span><button type="button" data-quitar="${esc(p.id)}" aria-label="Quitar ${esc(p.nombre)}">×</button></div>`).join("");
+    const tot = cadenas.map((c) => {
+      let suma = 0, faltan = 0;
+      items.forEach((p) => { if (p.porCadena[c]) suma += p.porCadena[c].final; else faltan++; });
+      return { c, suma, faltan };
+    }).filter((t) => t.faltan < items.length);
+    const completos = tot.filter((t) => !t.faltan);
+    const mejor = completos.length ? Math.min(...completos.map((t) => t.suma)) : null;
+    tot.sort((a, b) => a.faltan - b.faltan || a.suma - b.suma);
+    $("totales").innerHTML = tot.map((t) => `<div class="total${t.suma === mejor && !t.faltan ? " mejor" : ""}">
+      <span>${esc(t.c)}${t.faltan ? ` <small>(faltan ${t.faltan})</small>` : ""}</span><strong>${fmt.format(t.suma)}</strong></div>`).join("");
+  }
+
+  $("q").addEventListener("input", () => { limite = PAGINA; render(); });
+  $("orden").addEventListener("change", () => { limite = PAGINA; render(); });
+  $("cats").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-cat]"); if (!b) return;
+    cat = b.dataset.cat; limite = PAGINA;
+    document.querySelectorAll("#cats .chip").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    render();
+  });
+  $("lista").addEventListener("click", (e) => {
+    if (e.target.id === "mas") { limite += PAGINA; render(); return; }
+    const b = e.target.closest("[data-id]"); if (!b) return;
+    const id = b.dataset.id;
+    carrito.has(id) ? carrito.delete(id) : carrito.add(id);
+    guardar(); render(); renderCarrito();
+  });
+  $("items").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-quitar]"); if (!b) return;
+    carrito.delete(b.dataset.quitar); guardar(); render(); renderCarrito();
+  });
+
+  function ejemplo() {
+    try { return JSON.parse($("datos-ejemplo").textContent); } catch (e) { return null; }
+  }
+  fetch("data/precios.json", { cache: "no-cache" })
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(preparar)
+    .catch(() => {
+      const d = ejemplo();
+      if (d) preparar(d);
+      else $("meta").textContent = "No se pudieron cargar los precios. Ejecutá actualizar_precios.py para generar data/precios.json.";
+    });
+})();
+</script>
+</body>
+</html>
