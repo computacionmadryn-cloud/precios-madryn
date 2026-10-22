@@ -40,8 +40,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .buscar { flex: 1 1 380px; display: flex; min-width: 0; background: var(--surface); border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 .buscar input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: var(--ink); padding: 10px 14px; outline: none; }
 .buscar button { border: 0; border-left: 1px solid var(--line); background: transparent; padding: 0 14px; cursor: pointer; color: var(--muted); display: flex; align-items: center; }
-.ir-carrito { display: flex; align-items: center; gap: 6px; color: var(--ink); text-decoration: none; font-size: 14px; white-space: nowrap; }
-.ir-carrito b { background: var(--azul); color: #fff; border-radius: 10px; font-size: 12px; padding: 0 6px; min-width: 20px; text-align: center; }
 .cats { display: flex; gap: 4px 18px; overflow-x: auto; padding-block: 2px 8px; scrollbar-width: none; }
 .cats::-webkit-scrollbar { display: none; }
 .chip { flex: none; border: 0; background: none; font: inherit; font-size: 14px; color: rgba(0,0,0,.6); padding: 2px 0; cursor: pointer; border-bottom: 2px solid transparent; }
@@ -56,8 +54,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .orden { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
 .orden select { font: inherit; color: var(--ink); background: transparent; border: 0; font-weight: 600; cursor: pointer; }
 
-.grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
-@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
 .resumen { color: var(--muted); font-size: 13px; margin: 0 0 10px; }
 .lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 @media (max-width: 480px) {
@@ -85,26 +81,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .otros li { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; }
 .otros li span:first-child { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .otros .promo { color: var(--naranja); font-size: 11px; margin-left: 4px; }
-.btn-add { margin-top: auto; font: 600 14px var(--f-body); border: 0; border-radius: 6px; padding: 10px; cursor: pointer; background: var(--azul-soft); color: var(--azul); }
-.btn-add:hover { background: #d0e2fb; }
-.btn-add.en { background: var(--azul); color: #fff; }
 .mas { grid-column: 1 / -1; justify-self: center; font: 600 14px var(--f-body); background: var(--azul); color: #fff; border: 0; border-radius: 6px; padding: 12px 24px; cursor: pointer; }
-.mas:hover, .btn-add.en:hover { background: var(--azul-hover); }
-.vacio { grid-column: 1 / -1; background: var(--surface); border-radius: 6px; padding: 32px; text-align: center; color: var(--muted); }
+.mas:hover, .vacio { grid-column: 1 / -1; background: var(--surface); border-radius: 6px; padding: 32px; text-align: center; color: var(--muted); }
 
-/* Changuito */
-.carrito { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 110px); background: var(--surface); border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.12); padding: 16px; display: grid; gap: 12px; }
-@media (max-width: 900px) { .carrito { position: static; } }
-.carrito h2 { font-size: 18px; font-weight: 600; margin: 0; }
-.carrito .items { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
-.item { display: flex; gap: 8px; align-items: center; font-size: 13px; }
-.item span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.item button { border: 0; background: none; color: var(--azul); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; }
-.totales { display: grid; gap: 4px; border-top: 1px solid var(--line); padding-top: 10px; }
-.total { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; padding: 8px; border-radius: 6px; font-size: 14px; }
-.total.mejor { background: var(--verde-soft); color: var(--verde); font-weight: 700; }
-.total small { color: var(--muted); font-weight: 400; }
-.nota { font-size: 12px; color: var(--muted); margin: 0; }
 footer { margin-top: 32px; color: var(--muted); font-size: 12px; max-width: 80ch; }
 footer a { color: var(--azul); }
 input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
@@ -123,7 +102,6 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
         <input id="q" type="search" placeholder="Buscar productos, marcas y más…" aria-label="Buscar producto" autocomplete="off">
         <button type="submit" aria-label="Buscar"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       </form>
-      <a class="ir-carrito" href="#t-carrito"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="17" cy="19" r="1.5" fill="currentColor"/></svg>Mi changuito <b id="cuenta">0</b></a>
     </div>
     <nav class="cats" id="cats" aria-label="Categorías"></nav>
   </div></div>
@@ -146,19 +124,10 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     </label>
   </div>
 
-  <div class="grid">
-    <main>
-      <p class="resumen" id="resumen"></p>
-      <div class="lista" id="lista"></div>
-    </main>
-    <aside class="carrito" aria-labelledby="t-carrito">
-      <h2 id="t-carrito">Mi changuito</h2>
-      <div class="items" id="items"></div>
-      <div class="totales" id="totales"></div>
-      <p class="nota">El total por súper suma solo los productos que ese súper tiene. Si le falta alguno, lo indica.</p>
-    </aside>
-  </div>
-
+  <main>
+    <p class="resumen" id="resumen"></p>
+    <div class="lista" id="lista"></div>
+  </main>
   <footer>
     Fuente: <a href="https://datos.produccion.gob.ar/dataset/sepa-precios" target="_blank" rel="noopener">Precios Claros – Base SEPA</a>,
     la base oficial donde los supermercados informan sus precios todos los días. Se muestra el precio más bajo de cada cadena entre sus sucursales de Puerto Madryn.
@@ -173,10 +142,8 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   const $ = (id) => document.getElementById(id);
   const fmt = new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
   const PAGINA = 60;
-  let D = null, cadenas = [], productos = [], cat = "Todas", limite = PAGINA, carrito = new Set();
+  let D = null, cadenas = [], productos = [], cat = "Todas", limite = PAGINA;
 
-  try { carrito = new Set(JSON.parse(localStorage.getItem("changuito") || "[]")); } catch (e) {}
-  const guardar = () => { try { localStorage.setItem("changuito", JSON.stringify([...carrito])); } catch (e) {} };
   const norm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
   function preparar(datos) {
@@ -203,7 +170,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     const fecha = new Date(datos.generado);
     $("meta").textContent = `${productos.length.toLocaleString("es-AR")} productos · ${datos.sucursales.length} sucursales · actualizado ${fecha.toLocaleDateString("es-AR")}`;
     $("aviso").hidden = !datos.ejemplo;
-    render(); renderCarrito();
+    render();
   }
 
   function filtrados() {
@@ -227,7 +194,6 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
       const x = p.porCadena[c];
       return `<li title="${esc(x.suc)}"><span>${esc(c)}${x.promo ? `<span class="promo">promo</span>` : ""}</span><span>${fmt.format(x.final)}</span></li>`;
     }).join("");
-    const en = carrito.has(p.id);
     return `<article class="prod">
       <div class="prod-cat">${esc(p.categoria)}</div>
       <div class="prod-nombre" title="${esc(p.nombre)}">${esc(p.nombre)}</div>
@@ -236,7 +202,6 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
       <div class="precio-grande"><span class="val">${fmt.format(best.final)}</span>${off > 0 ? `<span class="off">${off}% OFF</span>` : ""}</div>
       <div class="donde${multi ? "" : " solo"}">${multi ? "Más barato en " : "Solo en "}${esc(orden[0])}</div>
       ${otros ? `<ul class="otros">${otros}</ul>` : ""}
-      <button class="btn-add${en ? " en" : ""}" type="button" data-id="${esc(p.id)}" aria-pressed="${en}">${en ? "✓ En el changuito" : "Agregar al changuito"}</button>
     </article>`;
   }
 
@@ -248,26 +213,6 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
       : `<p class="vacio">No encontramos productos con esa búsqueda. Probá con otra palabra o elegí "Todas".</p>`;
   }
 
-  function renderCarrito() {
-    const items = productos.filter((p) => carrito.has(p.id));
-    $("cuenta").textContent = items.length;
-    if (!items.length) {
-      $("items").innerHTML = `<p class="nota">Todavía no agregaste productos. Tocá "Agregar al changuito" en los que comprás seguido y te mostramos en qué súper te sale más barato todo junto.</p>`;
-      $("totales").innerHTML = ""; return;
-    }
-    $("items").innerHTML = items.map((p) => `<div class="item"><span>${esc(p.nombre)}</span><button type="button" data-quitar="${esc(p.id)}" aria-label="Quitar ${esc(p.nombre)}">×</button></div>`).join("");
-    const tot = cadenas.map((c) => {
-      let suma = 0, faltan = 0;
-      items.forEach((p) => { if (p.porCadena[c]) suma += p.porCadena[c].final; else faltan++; });
-      return { c, suma, faltan };
-    }).filter((t) => t.faltan < items.length);
-    const completos = tot.filter((t) => !t.faltan);
-    const mejor = completos.length ? Math.min(...completos.map((t) => t.suma)) : null;
-    tot.sort((a, b) => a.faltan - b.faltan || a.suma - b.suma);
-    $("totales").innerHTML = tot.map((t) => `<div class="total${t.suma === mejor && !t.faltan ? " mejor" : ""}">
-      <span>${esc(t.c)}${t.faltan ? ` <small>(faltan ${t.faltan})</small>` : ""}</span><strong>${fmt.format(t.suma)}</strong></div>`).join("");
-  }
-
   $("q").addEventListener("input", () => { limite = PAGINA; render(); });
   $("orden").addEventListener("change", () => { limite = PAGINA; render(); });
   $("cats").addEventListener("click", (e) => {
@@ -277,17 +222,8 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     render();
   });
   $("lista").addEventListener("click", (e) => {
-    if (e.target.id === "mas") { limite += PAGINA; render(); return; }
-    const b = e.target.closest("[data-id]"); if (!b) return;
-    const id = b.dataset.id;
-    carrito.has(id) ? carrito.delete(id) : carrito.add(id);
-    guardar(); render(); renderCarrito();
+    if (e.target.id === "mas") { limite += PAGINA; render(); }
   });
-  $("items").addEventListener("click", (e) => {
-    const b = e.target.closest("[data-quitar]"); if (!b) return;
-    carrito.delete(b.dataset.quitar); guardar(); render(); renderCarrito();
-  });
-
   function ejemplo() {
     try { return JSON.parse($("datos-ejemplo").textContent); } catch (e) { return null; }
   }
