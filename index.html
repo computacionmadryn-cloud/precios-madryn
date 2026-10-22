@@ -99,6 +99,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .otros .promo { color: var(--naranja); font-size: 11px; margin-left: 4px; }
 .mas { grid-column: 1 / -1; justify-self: center; margin: 16px; font: 600 14px var(--f-body); background: var(--azul); color: #fff; border: 0; border-radius: 6px; padding: 12px 24px; cursor: pointer; }
 .mas:hover { background: var(--azul-hover); }
+.publi { display: block; position: relative; background: var(--surface); border-radius: 6px; overflow: hidden; text-decoration: none; color: var(--ink); margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.publi img { display: block; width: 100%; max-height: 140px; object-fit: cover; }
+.publi .publi-txt { padding: 10px 14px; font-weight: 600; }
+.publi::after { content: "Publicidad"; position: absolute; top: 6px; right: 8px; font-size: 11px; color: #fff; background: rgba(0,0,0,.45); border-radius: 3px; padding: 1px 6px; }
+.lista .publi { margin: 0; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--line); }
 .pie { display: flex; justify-content: center; margin-top: 28px; }
 .vacio { grid-column: 1 / -1; background: var(--surface); border-radius: 6px; padding: 32px; text-align: center; color: var(--muted); }
 
@@ -142,6 +147,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     </label>
   </div>
 
+  <div id="banner-top"></div>
   <main>
     <p class="resumen" id="resumen"></p>
     <div class="lista" id="lista"></div>
@@ -160,7 +166,16 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   const PAGINA = 60;
   const ICONOS = { "Almacén": "🥫", "Bebidas": "🥤", "Lácteos": "🧀", "Carnes y fiambres": "🥩", "Frutas y verduras": "🥬",
     "Panadería y galletitas": "🥖", "Desayuno": "☕", "Congelados": "🧊", "Snacks y golosinas": "🍫", "Otros alimentos": "🛒" };
-  let fotos = {};
+  let fotos = {}, publis = [];
+  const CADA = 10; // un aviso cada 10 productos
+  function publi(i) {
+    const a = publis[i % publis.length];
+    if (!a) return "";
+    const href = /^https?:\/\//.test(a.link || "") ? a.link : "";
+    const cont = (a.imagen ? `<img src="${esc(a.imagen)}" alt="${esc(a.texto || "Publicidad")}" loading="lazy">` : "") +
+      (a.texto && !a.imagen ? `<div class="publi-txt">${esc(a.texto)}</div>` : "");
+    return href ? `<a class="publi" href="${esc(href)}" target="_blank" rel="noopener sponsored">${cont}</a>` : `<div class="publi">${cont}</div>`;
+  }
   let D = null, cadenas = [], productos = [], cat = "Todas", limite = PAGINA;
 
   const norm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -236,7 +251,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
     const r = filtrados();
     $("resumen").textContent = r.length ? `${r.length.toLocaleString("es-AR")} productos encontrados` : "";
     $("lista").innerHTML = r.length
-      ? r.slice(0, limite).map(tarjeta).join("") + (r.length > limite ? `<button class="mas" id="mas" type="button">Ver más productos</button>` : "")
+      ? r.slice(0, limite).map((p, i) => tarjeta(p) + (publis.length && (i + 1) % CADA === 0 ? publi((i + 1) / CADA) : "")).join("") + (r.length > limite ? `<button class="mas" id="mas" type="button">Ver más productos</button>` : "")
       : `<p class="vacio">No encontramos productos con esa búsqueda. Probá con otra palabra o elegí "Todas".</p>`;
   }
 
@@ -254,6 +269,14 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   function ejemplo() {
     try { return JSON.parse($("datos-ejemplo").textContent); } catch (e) { return null; }
   }
+  fetch("data/publicidades.json", { cache: "no-cache" })
+    .then((r) => (r.ok ? r.json() : []))
+    .then((a) => {
+      publis = Array.isArray(a) ? a.sort(() => Math.random() - 0.5) : [];
+      $("banner-top").innerHTML = publis.length ? publi(0) : "";
+      if (D) render();
+    })
+    .catch(() => {});
   fetch("data/imagenes.json", { cache: "no-cache" })
     .then((r) => (r.ok ? r.json() : {}))
     .then((f) => { fotos = f || {}; if (D) render(); })

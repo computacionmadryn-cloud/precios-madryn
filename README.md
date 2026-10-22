@@ -52,3 +52,14 @@ servidores de GitHub no pueden bajar los precios. La actualización corre en una
 catálogos online de Carrefour, Vea y ChangoMás, y guarda solo los links en `data/imagenes.json`.
 Corre solo todos los días en GitHub Actions (workflow "Buscar imágenes"). Los productos sin foto
 muestran un ícono de su categoría.
+
+## Publicidades
+
+Los avisos se cargan en `data/publicidades.json` (vacío = no se muestra nada). Cada aviso:
+
+```json
+[{ "imagen": "publicidad/panaderia.jpg", "link": "https://wa.me/549280...", "texto": "Panadería X" }]
+```
+
+Las imágenes van en la carpeta `publicidad/` (ideal 1200×140 px, en .webp o .jpg). Se muestra uno arriba
+de la lista y otro cada 10 productos, en orden aleatorio.
