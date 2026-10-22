@@ -45,3 +45,10 @@ servidores de GitHub no pueden bajar los precios. La actualización corre en una
 3. Correr una vez `C:\precios-madryn\actualizar.bat` (la primera vez Git pide iniciar sesión en GitHub).
 4. Programarlo todos los días a las 9:
    `schtasks /create /tn "Precios Madryn" /tr "C:\precios-madryn\actualizar.bat" /sc daily /st 09:00`
+
+## Fotos de los productos
+
+`buscar_imagenes.py` busca la foto de cada producto por su código de barras en Open Food Facts y en los
+catálogos online de Carrefour, Vea y ChangoMás, y guarda solo los links en `data/imagenes.json`.
+Corre solo todos los días en GitHub Actions (workflow "Buscar imágenes"). Los productos sin foto
+muestran un ícono de su categoría.

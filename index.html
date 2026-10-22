@@ -74,6 +74,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 /* Tarjeta de producto */
 .prod { background: var(--surface); border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.12); padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: box-shadow .15s; min-width: 0; }
 .prod:hover { box-shadow: 0 7px 16px rgba(0,0,0,.15); }
+.foto { height: 150px; display: flex; align-items: center; justify-content: center; margin: -4px 0 4px; }
+.foto img { max-width: 100%; max-height: 150px; object-fit: contain; }
+.foto .icono { width: 96px; height: 96px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 44px; }
+@media (max-width: 480px) { .foto { height: 110px; } .foto img { max-height: 110px; } .foto .icono { width: 72px; height: 72px; font-size: 34px; } }
 .prod-cat { font-size: 12px; color: var(--muted); }
 .prod-nombre { font-size: 14px; font-weight: 400; line-height: 1.3; color: var(--ink); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
 .prod-info { font-size: 12px; color: var(--muted); }
@@ -148,6 +152,9 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   const $ = (id) => document.getElementById(id);
   const fmt = new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
   const PAGINA = 60;
+  const ICONOS = { "Almacén": "🥫", "Bebidas": "🥤", "Lácteos": "🧀", "Carnes y fiambres": "🥩", "Frutas y verduras": "🥬",
+    "Panadería y galletitas": "🥖", "Desayuno": "☕", "Congelados": "🧊", "Snacks y golosinas": "🍫", "Otros alimentos": "🛒" };
+  let fotos = {};
   let D = null, cadenas = [], productos = [], cat = "Todas", limite = PAGINA;
 
   const norm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -200,7 +207,11 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
       const x = p.porCadena[c];
       return `<li title="${esc(x.suc)}"><span>${esc(c)}${x.promo ? `<span class="promo">promo</span>` : ""}</span><span>${fmt.format(x.final)}</span></li>`;
     }).join("");
+    const foto = fotos[p.id]
+      ? `<img src="${esc(fotos[p.id])}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML='<span class=&quot;icono&quot;>${ICONOS[p.categoria] || "🛒"}</span>'">`
+      : `<span class="icono" aria-hidden="true">${ICONOS[p.categoria] || "🛒"}</span>`;
     return `<article class="prod">
+      <div class="foto">${foto}</div>
       <div class="prod-cat">${esc(p.categoria)}</div>
       <div class="prod-nombre" title="${esc(p.nombre)}">${esc(p.nombre)}</div>
       <div class="prod-info">${esc(p.marca)}${p.presentacion ? " · " + esc(p.presentacion) : ""}</div>
@@ -233,6 +244,10 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   function ejemplo() {
     try { return JSON.parse($("datos-ejemplo").textContent); } catch (e) { return null; }
   }
+  fetch("data/imagenes.json", { cache: "no-cache" })
+    .then((r) => (r.ok ? r.json() : {}))
+    .then((f) => { fotos = f || {}; if (D) render(); })
+    .catch(() => {});
   fetch("data/precios.json", { cache: "no-cache" })
     .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(preparar)
